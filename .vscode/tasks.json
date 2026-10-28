@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start PromptAvero",
+			"type": "shell",
+			"command": "pnpm.cmd start",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}

@@ -1,0 +1,327 @@
+[
+  {
+    "id": "p-001",
+    "title": "Cinematic Black and White Portrait",
+    "slug": "cinematic-black-and-white-portrait",
+    "shortDescription": "A dramatic monochrome portrait with hard side light, deep shadows, and fine film grain against a textured wall.",
+    "promptText": "Cinematic black and white portrait of a woman with short dark hair, standing in front of a textured plaster wall.\nDramatic hard side lighting from the left, deep sculpted shadows, and a soft highlight on the cheekbone.\nShot on an 85mm lens at f/1.8 with shallow depth of field, fine analog film grain, high contrast, rich tonal range.\nQuiet, introspective expression, eyes looking slightly away from the camera.\nVertical 3:4 composition, photorealistic, no text, no watermark.",
+    "categorySlug": "cinematic-portraits",
+    "tags": ["black-and-white", "film-grain", "dramatic-lighting", "monochrome", "portrait"],
+    "images": [
+      { "src": "/images/prompts/cinematic-black-and-white-portrait-1.webp", "alt": "Black and white portrait of a woman with short dark hair lit from the side against a textured plaster wall", "width": 896, "height": 1200, "order": 1, "isPrimary": true },
+      { "src": "/images/prompts/cinematic-black-and-white-portrait-2.webp", "alt": "Close-up monochrome portrait of a woman looking away from the camera with a hard rim light", "width": 896, "height": 1200, "order": 2 },
+      { "src": "/images/prompts/cinematic-black-and-white-portrait-3.webp", "alt": "Half-body black and white portrait of a woman in a dark turtleneck lit by window light", "width": 896, "height": 1200, "order": 3 }
+    ],
+    "isFeatured": true,
+    "status": "published",
+    "imageStyle": "Cinematic monochrome photography",
+    "promptType": "Portrait",
+    "aspectRatio": "3:4",
+    "seoTitle": "Cinematic Black and White Portrait Prompt",
+    "seoDescription": "Copy this cinematic black and white portrait prompt with hard side light, deep shadows, and film grain, and download three reference variations.",
+    "publishedAt": "2026-10-20",
+    "updatedAt": "2026-10-21"
+  },
+  {
+    "id": "p-002",
+    "title": "Golden Hour Studio Portrait",
+    "slug": "golden-hour-studio-portrait",
+    "shortDescription": "A warm, glowing portrait of a young person with curly hair and creamy amber bokeh.",
+    "promptText": "Studio portrait of a young person with voluminous curly hair, bathed in warm golden hour light.\nSoft backlight creating a gentle glow around the hair, warm key light on the face, natural skin texture with visible pores.\nCreamy bokeh background in amber and honey tones, shallow depth of field, 85mm portrait lens.\nRelaxed, confident expression, shoulders slightly angled.\nVertical 3:4 composition, photorealistic, no text.",
+    "categorySlug": "ai-portraits",
+    "tags": ["golden-hour", "studio", "warm-tones", "bokeh", "portrait"],
+    "images": [
+      { "src": "/images/prompts/golden-hour-studio-portrait-1.webp", "alt": "Portrait of a young person with curly hair lit by warm golden hour light with an amber bokeh background", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": true,
+    "status": "published",
+    "imageStyle": "Warm studio portrait photography",
+    "promptType": "Portrait",
+    "aspectRatio": "3:4",
+    "seoTitle": "Golden Hour Studio Portrait Prompt",
+    "seoDescription": "A warm golden hour studio portrait prompt with creamy bokeh and natural skin detail, ready to copy.",
+    "publishedAt": "2026-10-17"
+  },
+  {
+    "id": "p-003",
+    "title": "Rugged Explorer Portrait",
+    "slug": "rugged-explorer-male-portrait",
+    "shortDescription": "A weathered, character-filled portrait of a bearded man in a wool jacket against a misty mountain backdrop.",
+    "promptText": "Portrait of a rugged middle-aged man with a weathered face and a neatly trimmed salt-and-pepper beard.\nHe wears a heavy wool jacket with a textured collar, standing outdoors under soft overcast light.\nMisty mountain slopes blurred in the background, muted green and grey colour palette.\nVisible skin texture, fine lines around the eyes, calm and determined expression.\n85mm lens, shallow depth of field, vertical 3:4 composition, photorealistic.",
+    "categorySlug": "male-portraits",
+    "tags": ["outdoor", "character", "overcast-light", "wool", "portrait"],
+    "images": [
+      { "src": "/images/prompts/rugged-explorer-male-portrait-1.webp", "alt": "Portrait of a bearded middle-aged man in a wool jacket with misty mountains behind him", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Natural light outdoor portrait",
+    "promptType": "Portrait",
+    "aspectRatio": "3:4",
+    "seoTitle": "Rugged Explorer Male Portrait Prompt",
+    "seoDescription": "A prompt for a weathered, bearded explorer portrait in soft overcast light with a misty mountain background.",
+    "publishedAt": "2026-10-14"
+  },
+  {
+    "id": "p-004",
+    "title": "Soft Window Light Portrait",
+    "slug": "soft-window-light-female-portrait",
+    "shortDescription": "A calm, naturally lit portrait of a woman with auburn hair in a cream knit sweater.",
+    "promptText": "Soft natural window light portrait of a woman with long auburn hair, wearing a cream chunky knit sweater.\nGentle directional light from a large window on one side, soft shadow transitions, calm and relaxed expression.\nNeutral beige interior background, subtle warm tones, shallow depth of field.\nFine skin detail, delicate flyaway hairs catching the light.\n50mm lens, vertical 3:4 composition, photorealistic, no text.",
+    "categorySlug": "female-portraits",
+    "tags": ["window-light", "natural-light", "soft", "knitwear", "portrait"],
+    "images": [
+      { "src": "/images/prompts/soft-window-light-female-portrait-1.webp", "alt": "Portrait of a woman with long auburn hair in a cream knit sweater lit by soft window light", "width": 896, "height": 1200, "order": 1, "isPrimary": true },
+      { "src": "/images/prompts/soft-window-light-female-portrait-2.webp", "alt": "Profile portrait of a woman with auburn hair in a cream sweater beside a window", "width": 896, "height": 1200, "order": 2 }
+    ],
+    "isFeatured": true,
+    "status": "published",
+    "imageStyle": "Natural light portrait photography",
+    "promptType": "Portrait",
+    "aspectRatio": "3:4",
+    "seoTitle": "Soft Window Light Female Portrait Prompt",
+    "seoDescription": "A gentle window-light portrait prompt of a woman in a cream knit sweater, with two reference images to download.",
+    "publishedAt": "2026-10-11"
+  },
+  {
+    "id": "p-005",
+    "title": "Avant-Garde Runway Fashion",
+    "slug": "avant-garde-runway-fashion",
+    "shortDescription": "A model in a sculptural oversized white garment on a minimal runway under a dramatic spotlight.",
+    "promptText": "Avant-garde high fashion photograph of a model walking on a minimal runway.\nShe wears a sculptural oversized white garment with exaggerated volume and crisp folds, architectural silhouette.\nDramatic overhead spotlight, dark surrounding space, sharp fabric detail and strong shadows on the floor.\nConfident stride, composed expression, slight motion in the fabric.\nProfessional fashion photography, vertical 3:4 composition, high detail.",
+    "categorySlug": "fashion-photography",
+    "tags": ["runway", "avant-garde", "couture", "spotlight", "white"],
+    "images": [
+      { "src": "/images/prompts/avant-garde-runway-fashion-1.webp", "alt": "Model in a sculptural oversized white garment walking on a minimal runway under a spotlight", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "High fashion runway photography",
+    "promptType": "Fashion",
+    "aspectRatio": "3:4",
+    "seoTitle": "Avant-Garde Runway Fashion Prompt",
+    "seoDescription": "An avant-garde runway fashion prompt featuring a sculptural white garment and dramatic spotlight lighting.",
+    "publishedAt": "2026-10-08"
+  },
+  {
+    "id": "p-006",
+    "title": "Magazine Cover Editorial Portrait",
+    "slug": "magazine-cover-editorial-portrait",
+    "shortDescription": "A polished editorial portrait of a stylish man in a camel coat on a sage green backdrop with room for layout.",
+    "promptText": "Editorial magazine-style portrait of a stylish man in a tailored camel coat over a cream turtleneck.\nStanding against a solid sage green studio backdrop, clean even lighting with a soft key light and subtle fill.\nConfident posture, hands relaxed, direct eye contact.\nGenerous negative space above the subject for headline placement, balanced colour palette.\nVertical 3:4 composition, sharp detail, no text, photorealistic.",
+    "categorySlug": "editorial-photography",
+    "tags": ["editorial", "magazine", "studio", "menswear", "negative-space"],
+    "images": [
+      { "src": "/images/prompts/magazine-cover-editorial-portrait-1.webp", "alt": "Man in a tailored camel coat standing against a sage green studio backdrop", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Editorial studio photography",
+    "promptType": "Editorial",
+    "aspectRatio": "3:4",
+    "seoTitle": "Magazine Cover Editorial Portrait Prompt",
+    "seoDescription": "A clean editorial portrait prompt with a camel coat, sage green backdrop, and negative space for headlines.",
+    "publishedAt": "2026-10-05"
+  },
+  {
+    "id": "p-007",
+    "title": "Floating Castle Fantasy Landscape",
+    "slug": "floating-castle-fantasy-landscape",
+    "shortDescription": "An epic castle on a floating island above a sea of clouds, lit by a pink and violet sunrise.",
+    "promptText": "Epic fantasy matte painting of a grand castle perched on a floating island high above a sea of clouds at sunrise.\nWaterfalls spill from the island edges into the sky, ancient stone bridges connect smaller islets, hanging gardens and tall spires.\nWarm pink and violet light across the clouds, glowing windows in the towers, distant mountains on the horizon.\nHighly detailed digital art, sweeping depth and atmospheric perspective.\nVertical 3:4 composition.",
+    "categorySlug": "fantasy-art",
+    "tags": ["castle", "floating-island", "clouds", "sunrise", "matte-painting"],
+    "images": [
+      { "src": "/images/prompts/floating-castle-fantasy-landscape-1.webp", "alt": "Castle on a floating island above clouds at sunrise with waterfalls falling from its edges", "width": 896, "height": 1200, "order": 1, "isPrimary": true },
+      { "src": "/images/prompts/floating-castle-fantasy-landscape-2.webp", "alt": "Close view of a floating castle with glowing windows and stone bridges at dusk", "width": 896, "height": 1200, "order": 2 }
+    ],
+    "isFeatured": true,
+    "status": "published",
+    "imageStyle": "Fantasy digital matte painting",
+    "promptType": "Environment",
+    "aspectRatio": "3:4",
+    "seoTitle": "Floating Castle Fantasy Landscape Prompt",
+    "seoDescription": "A fantasy landscape prompt for a floating castle above the clouds, with two variations to download.",
+    "publishedAt": "2026-10-02"
+  },
+  {
+    "id": "p-008",
+    "title": "Anime Rooftop Sunset Scene",
+    "slug": "anime-rooftop-sunset-scene",
+    "shortDescription": "An anime-style girl on a city rooftop with the wind in her hair beneath a vivid orange and pink sky.",
+    "promptText": "Anime style illustration of a young girl standing on a city rooftop at sunset, wind blowing through her hair and school-style jacket.\nVivid orange and pink sky with detailed layered clouds, glowing city skyline in the distance, soft rim light on her silhouette.\nCinematic anime film background painting, rich colour, clean linework, expressive and peaceful mood.\nVertical 3:4 composition.",
+    "categorySlug": "anime-art",
+    "tags": ["anime", "sunset", "rooftop", "cityscape", "illustration"],
+    "images": [
+      { "src": "/images/prompts/anime-rooftop-sunset-scene-1.webp", "alt": "Anime illustration of a girl on a city rooftop at sunset with an orange and pink sky", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Anime film illustration",
+    "promptType": "Illustration",
+    "aspectRatio": "3:4",
+    "seoTitle": "Anime Rooftop Sunset Scene Prompt",
+    "seoDescription": "An anime rooftop sunset prompt with a windswept character, layered clouds, and cinematic colour.",
+    "publishedAt": "2026-09-29"
+  },
+  {
+    "id": "p-009",
+    "title": "Luxury Perfume Bottle Product Shot",
+    "slug": "luxury-perfume-bottle-product-shot",
+    "shortDescription": "A premium perfume bottle on polished dark stone with soft reflections and rim lighting.",
+    "promptText": "Luxury perfume bottle product photograph on a polished dark stone surface.\nClean glass bottle with a heavy cap, soft reflections on the surface, subtle mist drifting behind it.\nControlled rim lighting to define edges, gentle gradient background in deep charcoal, a soft highlight on the glass.\nPremium advertising style, sharp focus, minimal composition, no text or logos.\nVertical 3:4 composition.",
+    "categorySlug": "product-photography",
+    "tags": ["perfume", "luxury", "reflections", "rim-light", "advertising"],
+    "images": [
+      { "src": "/images/prompts/luxury-perfume-bottle-product-shot-1.webp", "alt": "Luxury perfume bottle on a polished dark stone surface with soft reflections and rim lighting", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Luxury product photography",
+    "promptType": "Product",
+    "aspectRatio": "3:4",
+    "seoTitle": "Luxury Perfume Bottle Product Photography Prompt",
+    "seoDescription": "A product photography prompt for a luxury perfume bottle on dark stone with rim light and soft reflections.",
+    "publishedAt": "2026-09-26"
+  },
+  {
+    "id": "p-010",
+    "title": "Misty Mountain Lake at Sunrise",
+    "slug": "misty-mountain-lake-sunrise",
+    "shortDescription": "A still alpine lake reflecting layered mountain ridges as golden light breaks through the fog.",
+    "promptText": "Misty alpine lake at sunrise with layered mountain ridges fading into the distance.\nPerfectly still water creating a mirror reflection, soft golden light breaking through low fog, subtle pine trees along the shoreline.\nCool blue shadows contrasted with warm highlights, atmospheric perspective, peaceful and quiet mood.\nLandscape photography, wide angle, high detail, vertical 3:4 composition.",
+    "categorySlug": "landscapes",
+    "tags": ["mountains", "lake", "fog", "sunrise", "reflection"],
+    "images": [
+      { "src": "/images/prompts/misty-mountain-lake-sunrise-1.webp", "alt": "Misty alpine lake at sunrise reflecting layered mountain ridges", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Atmospheric landscape photography",
+    "promptType": "Landscape",
+    "aspectRatio": "3:4",
+    "seoTitle": "Misty Mountain Lake Sunrise Prompt",
+    "seoDescription": "A landscape prompt for a misty alpine lake at sunrise with mirror reflections and layered ridges.",
+    "publishedAt": "2026-09-23"
+  },
+  {
+    "id": "p-011",
+    "title": "Brutalist Concrete Museum Exterior",
+    "slug": "brutalist-concrete-museum-exterior",
+    "shortDescription": "Bold geometric concrete volumes under a clear sky with strong, graphic shadows.",
+    "promptText": "Brutalist concrete museum exterior composed of bold geometric volumes and deep recessed windows.\nRaw board-formed concrete texture, strong directional sunlight casting long graphic shadows, clear pale blue sky.\nWide-angle architectural photography from a low viewpoint, clean lines, no people, minimal landscaping.\nHigh detail, balanced symmetry, vertical 3:4 composition.",
+    "categorySlug": "architecture",
+    "tags": ["brutalist", "concrete", "museum", "geometry", "shadows"],
+    "images": [
+      { "src": "/images/prompts/brutalist-concrete-museum-exterior-1.webp", "alt": "Brutalist concrete museum with bold geometric volumes against a pale blue sky", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Architectural photography",
+    "promptType": "Architecture",
+    "aspectRatio": "3:4",
+    "seoTitle": "Brutalist Concrete Museum Exterior Prompt",
+    "seoDescription": "An architecture prompt for a brutalist concrete museum with bold geometry and long graphic shadows.",
+    "publishedAt": "2026-09-20"
+  },
+  {
+    "id": "p-012",
+    "title": "Geometric Gradient Abstract Art",
+    "slug": "geometric-gradient-abstract-art",
+    "shortDescription": "Overlapping translucent shapes in smooth violet, indigo, and coral gradients with a fine grain.",
+    "promptText": "Abstract digital art composed of overlapping translucent geometric shapes: circles, arcs, and rounded rectangles.\nSmooth gradients in violet, indigo, and coral, soft grain texture, subtle light bleed where shapes overlap.\nClean modern composition with balanced negative space, calm and contemporary mood.\nVertical 3:4 composition, no text.",
+    "categorySlug": "digital-art",
+    "tags": ["abstract", "gradient", "geometric", "violet", "grain"],
+    "images": [
+      { "src": "/images/prompts/geometric-gradient-abstract-art-1.webp", "alt": "Abstract artwork of overlapping translucent shapes in violet, indigo, and coral gradients", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Abstract digital art",
+    "promptType": "Abstract",
+    "aspectRatio": "3:4",
+    "seoTitle": "Geometric Gradient Abstract Art Prompt",
+    "seoDescription": "An abstract digital art prompt with translucent geometric shapes and violet, indigo, and coral gradients.",
+    "publishedAt": "2026-09-17"
+  },
+  {
+    "id": "p-013",
+    "title": "Minimal Still Life with Ceramics",
+    "slug": "minimal-still-life-ceramics",
+    "shortDescription": "Two matte ceramic vases and a dried branch on an off-white background with a muted, quiet palette.",
+    "promptText": "Minimalist still life of two matte ceramic vases of different heights and a single dried branch.\nOff-white seamless background, soft diffused daylight casting a gentle shadow, muted neutral palette of sand, stone, and cream.\nGenerous negative space, calm and balanced composition, subtle surface texture on the ceramics.\nVertical 3:4 composition, high detail.",
+    "categorySlug": "minimalist-art",
+    "tags": ["still-life", "ceramics", "neutral-tones", "negative-space", "minimal"],
+    "images": [
+      { "src": "/images/prompts/minimal-still-life-ceramics-1.webp", "alt": "Minimalist still life with two matte ceramic vases and a dried branch on an off-white background", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Minimalist still life",
+    "promptType": "Still life",
+    "aspectRatio": "3:4",
+    "seoTitle": "Minimal Still Life Ceramics Prompt",
+    "seoDescription": "A minimalist still life prompt with matte ceramics, a dried branch, and a muted neutral palette.",
+    "publishedAt": "2026-09-14"
+  },
+  {
+    "id": "p-014",
+    "title": "Golden Hour Beach Walk for Two",
+    "slug": "couple-golden-hour-beach-walk",
+    "shortDescription": "A couple walking hand in hand along the shore, seen from behind with long shadows and warm backlight.",
+    "promptText": "Couple walking hand in hand along a quiet beach at golden hour, seen from behind.\nWarm backlight, long soft shadows stretching across wet sand, gentle waves reflecting the sky.\nCasual light clothing moving in the breeze, relaxed and intimate mood.\nCandid lifestyle photography, shallow depth of field, natural colours, vertical 3:4 composition.",
+    "categorySlug": "couple-photography",
+    "tags": ["beach", "golden-hour", "couple", "lifestyle", "backlight"],
+    "images": [
+      { "src": "/images/prompts/couple-golden-hour-beach-walk-1.webp", "alt": "Couple walking hand in hand along a beach at golden hour with long shadows", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Candid lifestyle photography",
+    "promptType": "Lifestyle",
+    "aspectRatio": "3:4",
+    "seoTitle": "Couple Golden Hour Beach Walk Prompt",
+    "seoDescription": "A couple photography prompt for a golden hour beach walk with warm backlight and long shadows.",
+    "publishedAt": "2026-09-11"
+  },
+  {
+    "id": "p-015",
+    "title": "Vintage Film Street Portrait",
+    "slug": "vintage-film-street-portrait",
+    "shortDescription": "A night-time portrait of a man in a trench coat with anamorphic flares and a teal and orange grade.",
+    "promptText": "Cinematic street portrait of a man in a long trench coat standing on a city street at night.\nAnamorphic lens flares from distant lights, teal and orange colour grade, wet pavement reflecting neon signs.\nVintage film look with halation and light grain, shallow depth of field, moody and contemplative expression.\nVertical 3:4 composition, photorealistic, no text.",
+    "categorySlug": "male-portraits",
+    "tags": ["night", "film-look", "teal-and-orange", "street", "anamorphic"],
+    "images": [
+      { "src": "/images/prompts/vintage-film-street-portrait-1.webp", "alt": "Man in a trench coat on a rainy night street with anamorphic flares and a teal and orange grade", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Cinematic street photography",
+    "promptType": "Portrait",
+    "aspectRatio": "3:4",
+    "seoTitle": "Vintage Film Street Portrait Prompt",
+    "seoDescription": "A cinematic night-time street portrait prompt with anamorphic flares and a teal and orange film grade.",
+    "publishedAt": "2026-09-08"
+  },
+  {
+    "id": "p-016",
+    "title": "Cyberpunk City in Neon Rain",
+    "slug": "cyberpunk-city-neon-rain",
+    "shortDescription": "A rain-soaked cyberpunk alley glowing with violet and cyan neon and a lone figure under an umbrella.",
+    "promptText": "Cyberpunk city alley in heavy rain at night, glowing violet and cyan neon signs without readable text.\nReflective wet streets, steam rising from vents, towering buildings with layered lights above.\nA lone figure holding a transparent umbrella walks away from the camera, small in the frame for scale.\nDigital concept art, cinematic depth, rich contrast, vertical 3:4 composition.",
+    "categorySlug": "digital-art",
+    "tags": ["cyberpunk", "neon", "rain", "cityscape", "concept-art"],
+    "images": [
+      { "src": "/images/prompts/cyberpunk-city-neon-rain-1.webp", "alt": "Rainy cyberpunk alley lit by violet and cyan neon with a lone figure holding an umbrella", "width": 896, "height": 1200, "order": 1, "isPrimary": true }
+    ],
+    "isFeatured": false,
+    "status": "published",
+    "imageStyle": "Cyberpunk concept art",
+    "promptType": "Environment",
+    "aspectRatio": "3:4",
+    "seoTitle": "Cyberpunk City Neon Rain Prompt",
+    "seoDescription": "A cyberpunk concept art prompt for a rain-soaked neon alley with reflective streets and a lone figure.",
+    "publishedAt": "2026-09-05"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "promptavero",
+  "compatibility_date": "2026-10-28",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "promptavero"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "8d59c742fdfb4690a694c8ec41b271ae"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "promptavero-site-tags",
+      "database_id": "0dd3b1e9-bfb6-4c7c-ac77-db92a6c8691f"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://promptavero.com"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

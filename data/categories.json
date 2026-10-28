@@ -1,0 +1,142 @@
+[
+  {
+    "name": "AI Portraits",
+    "slug": "ai-portraits",
+    "description": "Polished AI portrait prompts covering studio lighting, expressive faces, and flattering skin detail.",
+    "image": "/images/prompts/golden-hour-studio-portrait-1.webp",
+    "seoTitle": "AI Portrait Prompts",
+    "seoDescription": "Copy-ready AI portrait prompts with studio lighting, natural skin detail, and expressive composition for any AI image generator.",
+    "isVisible": true,
+    "displayOrder": 1
+  },
+  {
+    "name": "Male Portraits",
+    "slug": "male-portraits",
+    "description": "Character-rich prompts for rugged, stylish, and cinematic portraits of men.",
+    "image": "/images/prompts/rugged-explorer-male-portrait-1.webp",
+    "seoTitle": "Male Portrait Prompts",
+    "seoDescription": "Prompts for realistic male portraits, from weathered explorers to cinematic night-time street scenes.",
+    "isVisible": true,
+    "displayOrder": 2
+  },
+  {
+    "name": "Female Portraits",
+    "slug": "female-portraits",
+    "description": "Soft, natural, and elegant prompts for portraits of women.",
+    "image": "/images/prompts/soft-window-light-female-portrait-1.webp",
+    "seoTitle": "Female Portrait Prompts",
+    "seoDescription": "Prompts for natural, window-lit and elegant female portraits you can recreate in your preferred AI image generator.",
+    "isVisible": true,
+    "displayOrder": 3
+  },
+  {
+    "name": "Fashion Photography",
+    "slug": "fashion-photography",
+    "description": "Runway, couture, and avant-garde fashion concepts described with precise detail.",
+    "image": "/images/prompts/avant-garde-runway-fashion-1.webp",
+    "seoTitle": "Fashion Photography Prompts",
+    "seoDescription": "AI prompts for runway and avant-garde fashion photography, with garment, lighting, and composition details.",
+    "isVisible": true,
+    "displayOrder": 4
+  },
+  {
+    "name": "Cinematic Portraits",
+    "slug": "cinematic-portraits",
+    "description": "Film-inspired portraits with dramatic lighting, grain, and considered color grading.",
+    "image": "/images/prompts/cinematic-black-and-white-portrait-1.webp",
+    "seoTitle": "Cinematic Portrait Prompts",
+    "seoDescription": "Cinematic AI portrait prompts featuring dramatic lighting, film grain, and moody colour grading.",
+    "isVisible": true,
+    "displayOrder": 5
+  },
+  {
+    "name": "Editorial Photography",
+    "slug": "editorial-photography",
+    "description": "Magazine-style imagery with clean backdrops, confident posing, and room for layout.",
+    "image": "/images/prompts/magazine-cover-editorial-portrait-1.webp",
+    "seoTitle": "Editorial Photography Prompts",
+    "seoDescription": "Prompts for magazine-style editorial portraits with polished studio backdrops and clean composition.",
+    "isVisible": true,
+    "displayOrder": 6
+  },
+  {
+    "name": "Fantasy Art",
+    "slug": "fantasy-art",
+    "description": "Epic worlds, floating castles, and magical scenery brought to life through detailed prompts.",
+    "image": "/images/prompts/floating-castle-fantasy-landscape-1.webp",
+    "seoTitle": "Fantasy Art Prompts",
+    "seoDescription": "Fantasy art prompts for floating castles, magical landscapes, and richly detailed worlds.",
+    "isVisible": true,
+    "displayOrder": 7
+  },
+  {
+    "name": "Anime Art",
+    "slug": "anime-art",
+    "description": "Anime-inspired illustrations with expressive characters and cinematic skies.",
+    "image": "/images/prompts/anime-rooftop-sunset-scene-1.webp",
+    "seoTitle": "Anime Art Prompts",
+    "seoDescription": "Anime-style AI prompts for expressive characters, sunset scenes, and cinematic backgrounds.",
+    "isVisible": true,
+    "displayOrder": 8
+  },
+  {
+    "name": "Product Photography",
+    "slug": "product-photography",
+    "description": "Clean, premium product shots with controlled lighting and reflective surfaces.",
+    "image": "/images/prompts/luxury-perfume-bottle-product-shot-1.webp",
+    "seoTitle": "Product Photography Prompts",
+    "seoDescription": "Product photography prompts for luxury packaging, studio lighting, and reflective surfaces.",
+    "isVisible": true,
+    "displayOrder": 9
+  },
+  {
+    "name": "Landscapes",
+    "slug": "landscapes",
+    "description": "Atmospheric natural scenery from misty lakes to dramatic mountain ridges.",
+    "image": "/images/prompts/misty-mountain-lake-sunrise-1.webp",
+    "seoTitle": "Landscape Prompts",
+    "seoDescription": "Landscape AI prompts for misty lakes, mountain ridges, and atmospheric sunrise scenes.",
+    "isVisible": true,
+    "displayOrder": 10
+  },
+  {
+    "name": "Architecture",
+    "slug": "architecture",
+    "description": "Bold buildings and spaces described with attention to form, light, and material.",
+    "image": "/images/prompts/brutalist-concrete-museum-exterior-1.webp",
+    "seoTitle": "Architecture Prompts",
+    "seoDescription": "Architecture prompts for brutalist, modern, and conceptual buildings with dramatic light and material detail.",
+    "isVisible": true,
+    "displayOrder": 11
+  },
+  {
+    "name": "Digital Art",
+    "slug": "digital-art",
+    "description": "Concept art, neon cityscapes, and abstract digital compositions.",
+    "image": "/images/prompts/cyberpunk-city-neon-rain-1.webp",
+    "seoTitle": "Digital Art Prompts",
+    "seoDescription": "Digital art prompts for cyberpunk scenes, abstract gradients, and concept art compositions.",
+    "isVisible": true,
+    "displayOrder": 12
+  },
+  {
+    "name": "Minimalist Art",
+    "slug": "minimalist-art",
+    "description": "Quiet compositions with muted palettes, generous negative space, and restraint.",
+    "image": "/images/prompts/minimal-still-life-ceramics-1.webp",
+    "seoTitle": "Minimalist Art Prompts",
+    "seoDescription": "Minimalist AI prompts featuring muted palettes, still-life compositions, and generous negative space.",
+    "isVisible": true,
+    "displayOrder": 13
+  },
+  {
+    "name": "Couple Photography",
+    "slug": "couple-photography",
+    "description": "Candid, warm lifestyle moments between two people.",
+    "image": "/images/prompts/couple-golden-hour-beach-walk-1.webp",
+    "seoTitle": "Couple Photography Prompts",
+    "seoDescription": "Couple photography prompts for golden-hour walks, candid moments, and warm lifestyle scenes.",
+    "isVisible": true,
+    "displayOrder": 14
+  }
+]
