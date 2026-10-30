@@ -119,7 +119,7 @@ async function loadPublicContent(): Promise<PublicContent> {
   return { categories: mappedCategories, prompts: mappedPrompts }
 }
 
-const getCachedPublicContent = unstable_cache(loadPublicContent, ['public-content-v1'], {
+const getCachedPublicContent = unstable_cache(loadPublicContent, ['public-content-v2'], {
   tags: ['public-content'],
   revalidate: 300,
 })
