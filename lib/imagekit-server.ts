@@ -1,16 +1,26 @@
 import 'server-only'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 
-function getPrivateKey() {
-  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY
-  if (!privateKey) throw new Error('ImageKit is not configured. Set IMAGEKIT_PRIVATE_KEY.')
-  return privateKey
+export type ImageKitConfig = {
+  privateKey: string
+  urlEndpoint: string
 }
 
-function authorizationHeader() {
-  return `Basic ${btoa(`${getPrivateKey()}:`)}`
+export async function getImageKitConfig(): Promise<ImageKitConfig> {
+  const { env } = await getCloudflareContext({ async: true })
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY || env.IMAGEKIT_PRIVATE_KEY
+  const urlEndpoint = process.env.IMAGEKIT_URL_ENDPOINT || env.IMAGEKIT_URL_ENDPOINT
+  if (!privateKey || !urlEndpoint) {
+    throw new Error('ImageKit is not configured. Set IMAGEKIT_PRIVATE_KEY and IMAGEKIT_URL_ENDPOINT.')
+  }
+  return { privateKey, urlEndpoint }
 }
 
-export async function uploadImageKitFile(file: File, fileName: string, folder: string) {
+function authorizationHeader(config: ImageKitConfig) {
+  return `Basic ${btoa(`${config.privateKey}:`)}`
+}
+
+export async function uploadImageKitFile(file: File, fileName: string, folder: string, config: ImageKitConfig) {
   const formData = new FormData()
   formData.set('file', file)
   formData.set('fileName', fileName)
@@ -18,7 +28,7 @@ export async function uploadImageKitFile(file: File, fileName: string, folder: s
 
   const response = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
     method: 'POST',
-    headers: { Authorization: authorizationHeader() },
+    headers: { Authorization: authorizationHeader(config) },
     body: formData,
   })
   if (!response.ok) throw new Error(`ImageKit upload failed (HTTP ${response.status}).`)
@@ -30,10 +40,10 @@ export async function uploadImageKitFile(file: File, fileName: string, folder: s
   return { fileId: result.fileId, url: result.url }
 }
 
-export async function deleteImageKitFile(fileId: string) {
+export async function deleteImageKitFile(fileId: string, config: ImageKitConfig) {
   const response = await fetch(`https://api.imagekit.io/v1/files/${encodeURIComponent(fileId)}`, {
     method: 'DELETE',
-    headers: { Authorization: authorizationHeader() },
+    headers: { Authorization: authorizationHeader(config) },
   })
   if (!response.ok) throw new Error(`ImageKit file deletion failed (HTTP ${response.status}).`)
 }

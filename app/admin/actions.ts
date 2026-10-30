@@ -4,7 +4,7 @@ import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { authorizeAdminAction } from '@/lib/supabase/admin'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { deleteImageKitFile } from '@/lib/imagekit-server'
+import { deleteImageKitFile, getImageKitConfig } from '@/lib/imagekit-server'
 
 export async function signInAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim()
@@ -316,8 +316,7 @@ export async function saveSettingsAction(formData: FormData) {
 export async function saveBrandAssetAction(asset: 'logo' | 'favicon', imageUrl: string) {
   const { supabase, user } = await authorizeAdminAction()
   if (!['logo', 'favicon'].includes(asset)) throw new Error('Invalid brand asset type.')
-  const endpoint = process.env.IMAGEKIT_URL_ENDPOINT
-  if (!endpoint) throw new Error('ImageKit is not configured. Set IMAGEKIT_URL_ENDPOINT.')
+  const { urlEndpoint: endpoint } = await getImageKitConfig()
   let parsedUrl: URL
   let parsedEndpoint: URL
   try {
@@ -428,7 +427,7 @@ export async function deletePromptImageAction(formData: FormData) {
   revalidatePath('/', 'layout')
   revalidatePath('/admin/media')
   try {
-    await deleteImageKitFile(image.imagekit_file_id)
+    await deleteImageKitFile(image.imagekit_file_id, await getImageKitConfig())
   } catch (cleanupError) {
     throw new Error(`Image reference was removed, but ImageKit cleanup failed: ${cleanupError instanceof Error ? cleanupError.message : 'Unknown cleanup error.'}`)
   }

@@ -1,5 +1,5 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server'
-import { deleteImageKitFile, uploadImageKitFile } from '@/lib/imagekit-server'
+import { deleteImageKitFile, getImageKitConfig, uploadImageKitFile } from '@/lib/imagekit-server'
 
 const promptImageTypes = ['image/jpeg', 'image/png', 'image/webp']
 const brandImageTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon']
@@ -14,8 +14,14 @@ async function getAdminUser() {
 export async function POST(request: Request) {
   const admin = await getAdminUser()
   if (!admin) return Response.json({ error: 'You are not authorized to upload images.' }, { status: 401 })
-  if (!process.env.IMAGEKIT_PRIVATE_KEY || !process.env.IMAGEKIT_URL_ENDPOINT) {
-    return Response.json({ error: 'ImageKit is not configured. Set IMAGEKIT_PRIVATE_KEY and IMAGEKIT_URL_ENDPOINT.' }, { status: 503 })
+  let imageKitConfig
+  try {
+    imageKitConfig = await getImageKitConfig()
+  } catch (error) {
+    return Response.json(
+      { error: error instanceof Error ? error.message : 'ImageKit is not configured.' },
+      { status: 503 },
+    )
   }
 
   const contentLength = Number(request.headers.get('content-length') ?? 0)
@@ -69,7 +75,7 @@ export async function POST(request: Request) {
   const fileName = `${isPromptImage ? 'image' : asset}-${crypto.randomUUID()}.${extension}`
   const folder = isPromptImage ? `/prompts/${promptId}` : `/branding/${admin.user.id}/${asset}`
   try {
-    return Response.json(await uploadImageKitFile(file, fileName, folder))
+    return Response.json(await uploadImageKitFile(file, fileName, folder, imageKitConfig))
   } catch (error) {
     return Response.json(
       { error: error instanceof Error ? error.message : 'ImageKit upload failed.' },
@@ -87,7 +93,7 @@ export async function DELETE(request: Request) {
     return Response.json({ error: 'Invalid ImageKit file ID.' }, { status: 400 })
   }
   try {
-    await deleteImageKitFile(body.fileId)
+    await deleteImageKitFile(body.fileId, await getImageKitConfig())
     return Response.json({ success: true })
   } catch (error) {
     return Response.json(
