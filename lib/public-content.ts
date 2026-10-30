@@ -38,7 +38,7 @@ async function loadPublicContent(): Promise<PublicContent> {
   const imageResult = promptIds.length
     ? await supabase
       .from('prompt_images')
-      .select('prompt_id,storage_path,alt_text,width,height,sort_order,is_primary,caption')
+      .select('prompt_id,image_url,alt_text,width,height,sort_order,is_primary,caption')
       .in('prompt_id', promptIds)
       .order('sort_order')
     : { data: [], error: null }
@@ -46,9 +46,8 @@ async function loadPublicContent(): Promise<PublicContent> {
 
   const imagesByPrompt = new Map<string, PromptImage[]>()
   for (const image of imageResult.data ?? []) {
-    const { data: urlData } = supabase.storage.from('prompt-images').getPublicUrl(image.storage_path)
     const entry: PromptImage = {
-      src: urlData.publicUrl,
+      src: image.image_url,
       alt: image.alt_text,
       width: image.width ?? 1200,
       height: image.height ?? 1600,

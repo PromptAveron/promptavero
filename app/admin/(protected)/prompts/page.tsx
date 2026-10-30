@@ -36,13 +36,13 @@ export default async function AdminPromptsPage({
   const categoryMap = new Map((categories ?? []).map((category) => [category.id, category.name]))
   const promptIds = (prompts ?? []).map((prompt) => prompt.id)
   const { data: promptImages, error: imageError } = promptIds.length
-    ? await supabase.from('prompt_images').select('prompt_id,storage_path,is_primary,sort_order').in('prompt_id', promptIds).order('sort_order')
+    ? await supabase.from('prompt_images').select('prompt_id,image_url,is_primary,sort_order').in('prompt_id', promptIds).order('sort_order')
     : { data: [], error: null }
   if (imageError) throw new Error(`Could not load prompt thumbnails: ${imageError.message}`)
   const thumbnails = new Map<string, string>()
   for (const image of promptImages ?? []) {
     if (!thumbnails.has(image.prompt_id) || image.is_primary) {
-      thumbnails.set(image.prompt_id, supabase.storage.from('prompt-images').getPublicUrl(image.storage_path).data.publicUrl)
+      thumbnails.set(image.prompt_id, image.image_url)
     }
   }
   const totalPages = Math.max(1, Math.ceil((filteredCount ?? 0) / pageSize))

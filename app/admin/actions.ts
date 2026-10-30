@@ -4,6 +4,7 @@ import { revalidatePath, updateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { authorizeAdminAction } from '@/lib/supabase/admin'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { deleteImageKitFile } from '@/lib/imagekit-server'
 
 export async function signInAction(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim()
@@ -312,23 +313,32 @@ export async function saveSettingsAction(formData: FormData) {
   redirect(`/admin/${key === 'seo' ? 'seo' : 'settings'}/?saved=1`)
 }
 
-export async function saveBrandAssetAction(asset: 'logo' | 'favicon', storagePath: string) {
+export async function saveBrandAssetAction(asset: 'logo' | 'favicon', imageUrl: string) {
   const { supabase, user } = await authorizeAdminAction()
-  const allowedExtensions = asset === 'favicon' ? /\.(png|webp|ico)$/i : /\.(png|jpe?g|webp)$/i
-  if (!storagePath.startsWith(`branding/${user.id}/`) || !allowedExtensions.test(storagePath)) {
-    throw new Error('Invalid brand asset storage path.')
+  if (!['logo', 'favicon'].includes(asset)) throw new Error('Invalid brand asset type.')
+  const endpoint = process.env.IMAGEKIT_URL_ENDPOINT
+  if (!endpoint) throw new Error('ImageKit is not configured. Set IMAGEKIT_URL_ENDPOINT.')
+  let parsedUrl: URL
+  let parsedEndpoint: URL
+  try {
+    parsedUrl = new URL(imageUrl)
+    parsedEndpoint = new URL(endpoint)
+    if (parsedUrl.protocol !== 'https:' || parsedUrl.origin !== parsedEndpoint.origin) throw new Error()
+    const endpointPath = parsedEndpoint.pathname.replace(/\/+$/, '')
+    if (endpointPath && !parsedUrl.pathname.startsWith(`${endpointPath}/`)) throw new Error()
+  } catch {
+    throw new Error('Brand asset must be a valid HTTPS URL from the configured ImageKit endpoint.')
   }
   const { data: current, error: readError } = await supabase.from('site_settings').select('value').eq('key', 'site').maybeSingle()
   if (readError) throw new Error(`Could not read current brand settings: ${readError.message}`)
   const previous = current?.value && typeof current.value === 'object' && !Array.isArray(current.value)
     ? current.value as Record<string, unknown>
     : {}
-  const publicUrl = supabase.storage.from('site-assets').getPublicUrl(storagePath).data.publicUrl
   const key = asset === 'logo' ? 'logo_url' : 'favicon_url'
   const { error } = await supabase.from('site_settings').upsert(
     {
       key: 'site',
-      value: { ...previous, [key]: publicUrl },
+      value: { ...previous, [key]: imageUrl },
       updated_by: user.id,
       updated_at: new Date().toISOString(),
     },
@@ -407,13 +417,19 @@ export async function movePromptImageAction(formData: FormData) {
 export async function deletePromptImageAction(formData: FormData) {
   const { supabase } = await authorizeAdminAction()
   const id = value(formData, 'id')
-  const { data: image, error: loadError } = await supabase.from('prompt_images').select('storage_path').eq('id', id).single()
+  const { data: image, error: loadError } = await supabase.from('prompt_images').select('imagekit_file_id').eq('id', id).single()
   if (loadError) throw new Error(`Could not find image: ${loadError.message}`)
+  if (!image.imagekit_file_id) {
+    throw new Error('This image has not been migrated to ImageKit. Run the ImageKit migration script before deleting it.')
+  }
   const { error } = await supabase.from('prompt_images').delete().eq('id', id)
   if (error) throw new Error(`Could not remove image metadata: ${error.message}`)
-  const { error: storageError } = await supabase.storage.from('prompt-images').remove([image.storage_path])
   revalidatePublicContent()
   revalidatePath('/', 'layout')
   revalidatePath('/admin/media')
-  if (storageError) throw new Error(`Image reference was removed, but Storage cleanup failed: ${storageError.message}`)
+  try {
+    await deleteImageKitFile(image.imagekit_file_id)
+  } catch (cleanupError) {
+    throw new Error(`Image reference was removed, but ImageKit cleanup failed: ${cleanupError instanceof Error ? cleanupError.message : 'Unknown cleanup error.'}`)
+  }
 }

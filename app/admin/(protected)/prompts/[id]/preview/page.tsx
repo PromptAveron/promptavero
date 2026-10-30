@@ -22,10 +22,10 @@ export default async function AdminPromptPreview({ params }: { params: Promise<{
       <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em]">{promptResult.data.title}</h1>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{promptResult.data.excerpt}</p>
       {imageResult.data?.length ? <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">{imageResult.data.map((image) => {
-        const { data: imageUrl } = supabase.storage.from('prompt-images').getPublicUrl(image.storage_path)
+        const imageUrl = image.image_url
         return <div key={image.id} className="overflow-hidden rounded-lg border border-border bg-card">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={imageUrl.publicUrl} alt={image.alt_text} className="aspect-[3/4] w-full object-cover" />
+          <img src={imageUrl} alt={image.alt_text} className="aspect-[3/4] w-full object-cover" />
           {image.caption ? <p className="p-2 text-xs text-muted-foreground">{image.caption}</p> : null}
         </div>
       })}</div> : <p className="mt-6 rounded-lg bg-card p-5 text-sm text-muted-foreground">No example images are attached.</p>}

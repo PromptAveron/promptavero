@@ -18,18 +18,18 @@
   "kv_namespaces": [
     {
       "binding": "NEXT_INC_CACHE_KV",
-      "id": "8d59c742fdfb4690a694c8ec41b271ae"
+      "id": "eae30d29280f41cbb683b2824f043e92"
     }
   ],
   "d1_databases": [
     {
       "binding": "NEXT_TAG_CACHE_D1",
       "database_name": "promptavero-site-tags",
-      "database_id": "0dd3b1e9-bfb6-4c7c-ac77-db92a6c8691f"
+      "database_id": "d4ef29a7-3df5-4c92-8dec-660487461d84"
     }
   ],
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://promptavero.com"
+    "NEXT_PUBLIC_SITE_URL": "https://promptavero.imgprompts.workers.dev"
   },
   "observability": {
     "enabled": true

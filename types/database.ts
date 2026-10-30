@@ -110,7 +110,8 @@ export interface Database {
         {
           id: string
           prompt_id: string
-          storage_path: string
+          image_url: string
+          imagekit_file_id: string | null
           alt_text: string
           caption: string | null
           sort_order: number
@@ -124,7 +125,8 @@ export interface Database {
         {
           id?: string
           prompt_id: string
-          storage_path: string
+          image_url: string
+          imagekit_file_id?: string | null
           alt_text?: string
           caption?: string | null
           sort_order?: number

@@ -11,7 +11,8 @@
     "preview:cloudflare": "opennextjs-cloudflare preview",
     "deploy:cloudflare": "opennextjs-cloudflare deploy",
     "cf:typegen": "wrangler types",
-    "seed:content": "node scripts/seed-content.mjs"
+    "seed:content": "node scripts/seed-content.mjs",
+    "migrate:imagekit": "node --env-file=.env.local scripts/migrate-supabase-images-to-imagekit.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

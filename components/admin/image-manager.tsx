@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation'
 import { ArrowDown, ArrowUp, ImagePlus, Star, Trash2 } from 'lucide-react'
 import { createSupabaseBrowserClient } from '@/lib/supabase/client'
 import { deletePromptImageAction, movePromptImageAction, refreshPromptPublicContentAction, setPrimaryImageAction, updateImageMetadataAction } from '@/app/admin/actions'
+import { deleteImageKitUpload, uploadImageToImageKit } from '@/lib/imagekit-upload-client'
 
 type PromptImageRow = {
   id: string
-  storage_path: string
+  image_url: string
   alt_text: string
   caption: string | null
   sort_order: number
@@ -61,13 +62,11 @@ export function ImageManager({ promptId }: { promptId: string }) {
         const bitmap = await createImageBitmap(file)
         const { width, height } = bitmap
         bitmap.close()
-        const extension = file.type === 'image/jpeg' ? 'jpg' : file.type.split('/')[1]
-        const storagePath = `${promptId}/${crypto.randomUUID()}.${extension}`
-        const { error: uploadError } = await supabase.storage.from('prompt-images').upload(storagePath, file, { contentType: file.type, upsert: false })
-        if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`)
+        const uploaded = await uploadImageToImageKit(file, { purpose: 'prompt', promptId })
         const { error: insertError } = await supabase.from('prompt_images').insert({
           prompt_id: promptId,
-          storage_path: storagePath,
+          image_url: uploaded.url,
+          imagekit_file_id: uploaded.fileId,
           alt_text: file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '),
           sort_order: currentCount,
           is_primary: currentCount === 0,
@@ -77,7 +76,11 @@ export function ImageManager({ promptId }: { promptId: string }) {
           height,
         })
         if (insertError) {
-          await supabase.storage.from('prompt-images').remove([storagePath])
+          try {
+            await deleteImageKitUpload(uploaded.fileId)
+          } catch (cleanupError) {
+            throw new Error(`Image was uploaded but could not be added to the prompt: ${insertError.message}. ImageKit cleanup failed: ${cleanupError instanceof Error ? cleanupError.message : 'Unknown cleanup error.'}`)
+          }
           throw new Error(`Image was uploaded but could not be added to the prompt: ${insertError.message}`)
         }
         currentCount += 1
@@ -97,7 +100,7 @@ export function ImageManager({ promptId }: { promptId: string }) {
     }
   }
 
-  const publicUrl = (path: string) => createSupabaseBrowserClient().storage.from('prompt-images').getPublicUrl(path).data.publicUrl
+  const publicUrl = (image: PromptImageRow) => image.image_url
 
   return (
     <section
@@ -120,7 +123,7 @@ export function ImageManager({ promptId }: { promptId: string }) {
         {images.map((image, index) => (
           <article key={image.id} className="overflow-hidden rounded-lg border border-border">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={publicUrl(image.storage_path)} alt={image.alt_text} className="h-36 w-full bg-muted object-cover" />
+            <img src={publicUrl(image)} alt={image.alt_text} className="h-36 w-full bg-muted object-cover" />
             <form action={updateImageMetadataAction} className="space-y-2 p-3">
               <input type="hidden" name="id" value={image.id} />
               <label className="block text-[11px] font-medium">Alt text<input name="alt_text" defaultValue={image.alt_text} className="mt-1 h-8 w-full rounded border border-border px-2 text-xs font-normal" /></label>

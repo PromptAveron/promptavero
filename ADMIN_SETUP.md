@@ -1,23 +1,27 @@
 # PromptAvero admin setup
 
-The `/admin` area uses Supabase Auth, PostgreSQL row-level security, and the `prompt-images` Storage bucket. Admin signup is not exposed by the application.
+The `/admin` area uses Supabase Auth and PostgreSQL row-level security. All image files are stored in ImageKit; Supabase is used for auth and database records only. Admin signup is not exposed by the application.
 
 ## Configure Supabase
 
 1. Create a Supabase project and copy its project URL and publishable/anon key to `.env.local` using [.env.example](./.env.example) as the template. Never put a service-role key in a `NEXT_PUBLIC_` variable or browser code.
 2. Apply [`supabase/migrations/202610260001_admin_cms.sql`](./supabase/migrations/202610260001_admin_cms.sql) in the Supabase SQL editor or through the Supabase CLI.
-3. Apply [`supabase/migrations/202610260002_branding_consent.sql`](./supabase/migrations/202610260002_branding_consent.sql) to enable site logo/favicon storage and the safely filtered public settings function.
+3. Apply [`supabase/migrations/202610260002_branding_consent.sql`](./supabase/migrations/202610260002_branding_consent.sql) to enable site branding settings and the safely filtered public settings function.
 4. Apply [`supabase/migrations/202610260003_ad_network_codes.sql`](./supabase/migrations/202610260003_ad_network_codes.sql) to expose the configured ad snippets through the public-safe settings function.
 5. Apply [`supabase/migrations/202610280001_prompt_engagement.sql`](./supabase/migrations/202610280001_prompt_engagement.sql) to enable prompt likes and copy counts.
 6. Apply [`supabase/migrations/202610280002_prompt_copy_cooldown.sql`](./supabase/migrations/202610280002_prompt_copy_cooldown.sql) to count no more than one prompt copy per browser per 30 seconds.
 7. Apply [`supabase/migrations/202610280003_toggle_prompt_likes.sql`](./supabase/migrations/202610280003_toggle_prompt_likes.sql) to allow visitors to remove their likes.
 8. Apply [`supabase/migrations/202610280004_fix_prompt_like_counts.sql`](./supabase/migrations/202610280004_fix_prompt_like_counts.sql) to increment totals correctly and reconcile counts for existing likes.
-9. In Supabase Auth, create the initial administrator through a trusted operator-only process. Disable public signups.
-10. Set the initial admin user's **app metadata** role to `admin` using the Supabase dashboard's trusted user-management controls or a server-side administrative script. Do not set `user_metadata.role`; users can edit their own user metadata. The RLS policies and server checks use only the signed app-metadata claim.
-11. For a fresh project, run `pnpm seed:content` once to import the bundled public prompt and category content, including images. Set `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_ADMIN_USER_ID` only in the private environment used by the one-time import process. The importer skips existing slugs and is safe to rerun; it does not overwrite admin-managed records.
-12. Restart the Next.js process and visit `/admin/`.
+9. Apply [`supabase/migrations/202610300001_imagekit_file_ids.sql`](./supabase/migrations/202610300001_imagekit_file_ids.sql) to store ImageKit file IDs for cleanup when an admin deletes an image.
+10. In ImageKit, copy the URL endpoint and private key. Set `IMAGEKIT_URL_ENDPOINT` and `IMAGEKIT_PRIVATE_KEY` in the local environment; configure the endpoint as a build variable and Worker variable, and the private key as a Worker secret. Keep the private key server-side; never use a `NEXT_PUBLIC_` prefix.
+11. Back up the Supabase project. Set `SUPABASE_SERVICE_ROLE_KEY` in a trusted local environment and run `pnpm migrate:imagekit`. It copies legacy prompt, branding, category, and SEO images to ImageKit, updates their database URLs, deletes the old files, and removes the `prompt-images` and `site-assets` buckets. This empties those buckets; do not run it until ImageKit is configured and the backup is complete. For a fresh project this also removes the empty buckets.
+12. Apply [`supabase/migrations/202610300002_rename_prompt_image_url.sql`](./supabase/migrations/202610300002_rename_prompt_image_url.sql) to rename the prompt image database field after the migration has replaced all legacy paths with ImageKit URLs.
+13. In Supabase Auth, create the initial administrator through a trusted operator-only process. Disable public signups.
+14. Set the initial admin user's **app metadata** role to `admin` using the Supabase dashboard's trusted user-management controls or a server-side administrative script. Do not set `user_metadata.role`; users can edit their own user metadata. The RLS policies and server checks use only the signed app-metadata claim.
+15. For a fresh project, run `pnpm seed:content` once to import the bundled public prompt and category content, including its initial images. Set `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ADMIN_USER_ID`, and `IMAGEKIT_PRIVATE_KEY` only in the private environment used by the one-time import process. The importer skips existing slugs and is safe to rerun; it does not overwrite admin-managed records.
+16. Restart the Next.js process and visit `/admin/`.
 
-The application's database client uses the signed-in user's session and the anon key. No service-role key is needed by the dashboard or public website. The migration creates the `prompt-images` public-read/private-write bucket, restricts upload MIME types and size, grants writes only to app-metadata administrators, and enforces a maximum of five image rows per prompt with a transaction-scoped database lock. `proxy.ts` refreshes Supabase auth cookies; every protected page and mutation additionally verifies the current administrator claim.
+Supabase remains the application's authentication and database provider; it is not used for image file storage. Admin uploads, seeded images, and migrated legacy images are stored in ImageKit. The application's database client uses the signed-in user's session and the anon key. No service-role key is needed by the dashboard or public website. The database enforces a maximum of five image rows per prompt with a transaction-scoped lock. `proxy.ts` refreshes Supabase auth cookies; every protected page and mutation additionally verifies the current administrator claim.
 
 ## Included admin capabilities
 
@@ -53,7 +57,7 @@ Do not claim production authentication, database policies, or uploads have been 
 - With no Supabase URL/key configured, `/admin/` shows setup guidance; the existing public JSON content still renders.
 - After setup, an unauthenticated `/admin/` request redirects to `/admin/login/`; a signed-in account without app metadata role `admin` is rejected.
 - An admin can create a category, create a draft, edit/publish/unpublish it, and find it through list search and filters.
-- After the initial import or creating a published prompt with at least one image, verify it appears on the home/explore/category routes and is included in the sitemap.
+- After the initial import or creating a published prompt with at least one ImageKit image, verify it appears on the home/explore/category routes and is included in the sitemap.
 - Upload five supported images to a prompt; a sixth must fail in the UI and at the database policy/trigger layer. Check reordering, primary image, alt text, replacement, and deletion.
 - Verify category deletion is refused while prompts reference it; check SEO fields, settings save/refresh, mobile navigation, and sign-out.
 - Verify public analytics/ad code loads only when configured, including listing ads and both prompt-page placements; confirm none load in admin routes.

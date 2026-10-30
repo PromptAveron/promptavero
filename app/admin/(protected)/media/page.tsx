@@ -10,9 +10,6 @@ export default async function AdminMediaPage() {
   const promptsResult = promptIds.length ? await supabase.from('prompts').select('id,title,slug').in('id', promptIds) : { data: [], error: null }
   if (promptsResult.error) throw new Error(`Could not load image associations: ${promptsResult.error.message}`)
   const prompts = new Map((promptsResult.data ?? []).map((prompt) => [prompt.id, prompt]))
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  if (!supabaseUrl) throw new Error('Supabase public URL is not configured.')
-
   return (
     <div className="mx-auto max-w-6xl pt-10 md:pt-0">
       <header><p className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">Assets</p><h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em]">Media library</h1><p className="mt-2 text-sm text-muted-foreground">Latest 100 prompt images.</p></header>
@@ -20,7 +17,7 @@ export default async function AdminMediaPage() {
         <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {images.map((image) => {
             const prompt = prompts.get(image.prompt_id)
-            const url = `${supabaseUrl}/storage/v1/object/public/prompt-images/${image.storage_path.split('/').map(encodeURIComponent).join('/')}`
+            const url = image.image_url
             return (
               <article key={image.id} className="overflow-hidden rounded-lg border border-border bg-card">
                 <div className="h-48 bg-muted">

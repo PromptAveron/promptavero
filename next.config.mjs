@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs'
 const redirectEntries = JSON.parse(
   readFileSync(new URL('./data/redirects.json', import.meta.url), 'utf8'),
 )
-const supabaseImagePattern = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? new URL(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/**`)
+const imageKitImagePattern = process.env.IMAGEKIT_URL_ENDPOINT
+  ? new URL(`${process.env.IMAGEKIT_URL_ENDPOINT.replace(/\/+$/, '')}/**`)
   : null
 
 /** @type {import('next').NextConfig} */
@@ -16,7 +16,7 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     formats: ['image/webp'],
-    remotePatterns: supabaseImagePattern ? [supabaseImagePattern] : [],
+    remotePatterns: imageKitImagePattern ? [imageKitImagePattern] : [],
     ...(process.env.CLOUDFLARE_WORKERS === '1' ? { unoptimized: true } : {}),
   },
   async redirects() {

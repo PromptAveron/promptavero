@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ImagePlus } from 'lucide-react'
 import { saveBrandAssetAction } from '@/app/admin/actions'
-import { createSupabaseBrowserClient } from '@/lib/supabase/client'
+import { uploadImageToImageKit } from '@/lib/imagekit-upload-client'
 
 export function BrandAssetUpload({
   asset,
@@ -32,19 +32,8 @@ export function BrandAssetUpload({
           : 'Choose a PNG, WebP, or ICO favicon.')
       }
       if (file.size > 2 * 1024 * 1024) throw new Error('File must be 2 MB or smaller.')
-      const supabase = createSupabaseBrowserClient()
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
-      if (authError || !user) throw new Error('Your session expired. Sign in again and retry.')
-      const extension = asset === 'favicon' && file.type.includes('icon')
-        ? 'ico'
-        : file.type === 'image/jpeg' ? 'jpg' : file.type.split('/')[1]
-      const path = `branding/${user.id}/${asset}-${crypto.randomUUID()}.${extension}`
-      const { error: uploadError } = await supabase.storage.from('site-assets').upload(path, file, {
-        contentType: file.type,
-        upsert: false,
-      })
-      if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`)
-      await saveBrandAssetAction(asset, path)
+      const uploaded = await uploadImageToImageKit(file, { purpose: 'branding', asset })
+      await saveBrandAssetAction(asset, uploaded.url)
       router.refresh()
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : 'Could not upload the file.')

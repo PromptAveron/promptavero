@@ -7,13 +7,41 @@ const root = fileURLToPath(new URL('../', import.meta.url))
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 const adminUserId = process.env.SUPABASE_ADMIN_USER_ID
-if (!supabaseUrl || !serviceRoleKey || !adminUserId) {
-  throw new Error('Set NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, and SUPABASE_ADMIN_USER_ID before importing.')
+const imageKitPrivateKey = process.env.IMAGEKIT_PRIVATE_KEY
+if (!supabaseUrl || !serviceRoleKey || !adminUserId || !imageKitPrivateKey) {
+  throw new Error('Set NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ADMIN_USER_ID, and IMAGEKIT_PRIVATE_KEY before importing.')
 }
 
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 })
+const imageKitAuthorization = `Basic ${Buffer.from(`${imageKitPrivateKey}:`).toString('base64')}`
+async function uploadImage(contents, fileName, folder, mimeType) {
+  const formData = new FormData()
+  formData.set('file', new Blob([contents], { type: mimeType }), fileName)
+  formData.set('fileName', fileName)
+  formData.set('folder', folder)
+  const response = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+    method: 'POST',
+    headers: { Authorization: imageKitAuthorization },
+    body: formData,
+  })
+  if (!response.ok) throw new Error(`ImageKit upload failed (HTTP ${response.status}).`)
+  const result = await response.json()
+  if (typeof result.fileId !== 'string' || typeof result.url !== 'string') {
+    throw new Error('ImageKit returned an invalid upload response.')
+  }
+  return result
+}
+
+async function deleteImage(fileId) {
+  const response = await fetch(`https://api.imagekit.io/v1/files/${encodeURIComponent(fileId)}`, {
+    method: 'DELETE',
+    headers: { Authorization: imageKitAuthorization },
+  })
+  if (!response.ok) throw new Error(`ImageKit file deletion failed (HTTP ${response.status}).`)
+}
+
 const categories = JSON.parse(await readFile(join(root, 'data', 'categories.json'), 'utf8'))
 const prompts = JSON.parse(await readFile(join(root, 'data', 'prompts.json'), 'utf8'))
 const categoryIds = new Map()
@@ -68,7 +96,7 @@ for (const prompt of prompts) {
   }).select('id').single()
   if (promptError) throw new Error(`Could not import prompt "${prompt.slug}": ${promptError.message}`)
 
-  const uploadedPaths = []
+  const uploadedFileIds = []
   try {
     for (const [index, image] of prompt.images.entries()) {
       const localPath = join(root, 'public', image.src.replace(/^\/+/, ''))
@@ -78,13 +106,13 @@ for (const prompt of prompts) {
       const mimeType = extension === 'jpg' || extension === 'jpeg' ? 'image/jpeg' : extension === 'png' ? 'image/png' : extension === 'webp' ? 'image/webp' : null
       if (!mimeType) throw new Error(`Unsupported image format: ${image.src}`)
       if (info.size > 5 * 1024 * 1024) throw new Error(`Image exceeds the 5 MB limit: ${image.src}`)
-      const storagePath = `${inserted.id}/${crypto.randomUUID()}-${basename(image.src)}`
-      const { error: uploadError } = await supabase.storage.from('prompt-images').upload(storagePath, contents, { contentType: mimeType, upsert: false })
-      if (uploadError) throw new Error(`Could not upload "${image.src}": ${uploadError.message}`)
-      uploadedPaths.push(storagePath)
+      const fileName = `${crypto.randomUUID()}-${basename(image.src)}`
+      const uploaded = await uploadImage(contents, fileName, `/prompts/${inserted.id}`, mimeType)
+      uploadedFileIds.push(uploaded.fileId)
       const { error: imageError } = await supabase.from('prompt_images').insert({
         prompt_id: inserted.id,
-        storage_path: storagePath,
+        image_url: uploaded.url,
+        imagekit_file_id: uploaded.fileId,
         alt_text: image.alt,
         sort_order: image.order ?? index,
         is_primary: Boolean(image.isPrimary),
@@ -96,9 +124,12 @@ for (const prompt of prompts) {
       if (imageError) throw new Error(`Could not attach "${image.src}": ${imageError.message}`)
     }
   } catch (error) {
-    if (uploadedPaths.length) {
-      const { error: cleanupError } = await supabase.storage.from('prompt-images').remove(uploadedPaths)
-      if (cleanupError) console.error(`Storage cleanup also failed for ${prompt.slug}: ${cleanupError.message}`)
+    for (const fileId of uploadedFileIds) {
+      try {
+        await deleteImage(fileId)
+      } catch (cleanupError) {
+        console.error(`ImageKit cleanup also failed for ${prompt.slug}: ${cleanupError instanceof Error ? cleanupError.message : 'Unknown cleanup error.'}`)
+      }
     }
     const { error: deleteError } = await supabase.from('prompts').delete().eq('id', inserted.id)
     if (deleteError) console.error(`Prompt cleanup also failed for ${prompt.slug}: ${deleteError.message}`)
