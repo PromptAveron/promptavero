@@ -29,7 +29,9 @@
     }
   ],
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://promptavero.imgprompts.workers.dev"
+    "NEXT_PUBLIC_SITE_URL": "https://promptavero.imgprompts.workers.dev",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://njxptjvesqdngotwqnwd.supabase.co",
+    "IMAGEKIT_URL_ENDPOINT": "https://ik.imagekit.io/promptavero"
   },
   "observability": {
     "enabled": true
