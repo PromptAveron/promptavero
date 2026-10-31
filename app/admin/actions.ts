@@ -5,19 +5,33 @@ import { redirect } from 'next/navigation'
 import { authorizeAdminAction } from '@/lib/supabase/admin'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { deleteImageKitFile, getImageKitConfig } from '@/lib/imagekit-server'
+import { clearAdminLoginAttempts, reserveAdminLoginAttempt } from '@/lib/admin-login-rate-limit'
 
 export async function signInAction(formData: FormData) {
+  const attempt = await reserveAdminLoginAttempt()
+  if (!attempt.allowed) {
+    const retryAt = attempt.retry_at
+      ? new Date(attempt.retry_at).toLocaleString('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: 'UTC',
+      })
+      : '24 hours from now'
+    redirect(`/admin/login/?error=${encodeURIComponent(`Too many failed sign-in attempts. Try again after ${retryAt} UTC.`)}`)
+  }
+
   const email = String(formData.get('email') ?? '').trim()
   const password = String(formData.get('password') ?? '')
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !password) {
-    redirect('/admin/login/?error=Enter%20a%20valid%20email%20and%20password.')
+    redirect(`/admin/login/?error=${encodeURIComponent('Enter a valid email and password.')}`)
   }
   const supabase = await createSupabaseServerClient()
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if (error || !data.user || data.user.app_metadata?.role !== 'admin') {
     if (data.user) await supabase.auth.signOut()
-    redirect('/admin/login/?error=Sign-in%20failed.%20Check%20your%20credentials%20and%20admin%20access.')
+    redirect(`/admin/login/?error=${encodeURIComponent('Sign-in failed. Check your credentials and admin access.')}`)
   }
+  await clearAdminLoginAttempts(attempt.ipHash)
   redirect('/admin/')
 }
 

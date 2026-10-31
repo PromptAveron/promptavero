@@ -19,13 +19,15 @@ The `/admin` area uses Supabase Auth and PostgreSQL row-level security. All imag
 13. In Supabase Auth, create the initial administrator through a trusted operator-only process. Disable public signups.
 14. Set the initial admin user's **app metadata** role to `admin` using the Supabase dashboard's trusted user-management controls or a server-side administrative script. Do not set `user_metadata.role`; users can edit their own user metadata. The RLS policies and server checks use only the signed app-metadata claim.
 15. For a fresh project, run `pnpm seed:content` once to import the bundled public prompt and category content, including its initial images. Set `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ADMIN_USER_ID`, and `IMAGEKIT_PRIVATE_KEY` only in the private environment used by the one-time import process. The importer skips existing slugs and is safe to rerun; it does not overwrite admin-managed records.
-16. Restart the Next.js process and visit `/admin/`.
+16. Apply [`supabase/migrations/202610310001_admin_login_rate_limit.sql`](./supabase/migrations/202610310001_admin_login_rate_limit.sql) before enabling admin sign-in. Set `ADMIN_LOGIN_RATE_LIMIT_SECRET` to a randomly generated secret (at least 32 characters) in local and deployed runtime environments; do not expose it to the browser or add it as a build variable. Store the same secret in the private database config table by running `insert into public.admin_login_rate_limit_config (id, server_secret) values (true, '<your secret>') on conflict (id) do update set server_secret = excluded.server_secret;` in the Supabase SQL editor. Do not commit the secret or SQL statement containing it.
+17. Restart the Next.js process and visit `/admin/`.
 
 Supabase remains the application's authentication and database provider; it is not used for image file storage. Admin uploads, seeded images, and migrated legacy images are stored in ImageKit. The application's database client uses the signed-in user's session and the anon key. No service-role key is needed by the dashboard or public website. The database enforces a maximum of five image rows per prompt with a transaction-scoped lock. `proxy.ts` refreshes Supabase auth cookies; every protected page and mutation additionally verifies the current administrator claim.
 
 ## Included admin capabilities
 
 - Email/password sign-in; no public registration; server-checked `app_metadata.role === "admin"`.
+- Admin sign-in allows three attempts per client IP in a 24-hour window and locks the IP for 24 hours after the third attempt. A successful admin sign-in clears the attempt history; IPs are stored only as keyed HMACs.
 - Dashboard counts and recently edited prompt rows sourced from PostgreSQL.
 - Prompt draft/publish, editing, searching, filtering, ordering, pagination, duplication, trashing, and image upload/metadata/order/primary-image management.
 - Category create/edit/delete with usage checks.
