@@ -18,27 +18,28 @@ export function PromptCard({
 }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-      <PromptCardLink
-        href={promptPath(prompt.slug)}
-        title={prompt.title}
-        image={prompt.image}
-      />
       <div className="relative aspect-[3/4] overflow-hidden bg-muted">
-        <Image
-          src={prompt.image.src}
-          alt={prompt.image.alt}
-          width={prompt.image.width}
-          height={prompt.image.height}
-          sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
-          loading={priority ? 'eager' : 'lazy'}
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
-        {prompt.isFeatured ? (
-          <span className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-medium text-[#3d2fb0] shadow-sm">
-            <Star className="size-3 fill-current" aria-hidden="true" />
-            Featured
-          </span>
-        ) : null}
+        <PromptCardLink
+          href={promptPath(prompt.slug)}
+          title={prompt.title}
+          className="group/image absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        >
+          <Image
+            src={prompt.image.src}
+            alt={prompt.image.alt}
+            width={prompt.image.width}
+            height={prompt.image.height}
+            sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
+            loading={priority ? 'eager' : 'lazy'}
+            className="size-full object-cover transition-transform duration-500 group-hover/image:scale-[1.03]"
+          />
+          {prompt.isFeatured ? (
+            <span className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-medium text-[#3d2fb0] shadow-sm">
+              <Star className="size-3 fill-current" aria-hidden="true" />
+              Featured
+            </span>
+          ) : null}
+        </PromptCardLink>
         <div className="absolute right-3 top-3 z-30">
           <PromptLikeButton
             promptId={prompt.id}
@@ -64,8 +65,10 @@ export function PromptCard({
             </time>
           ) : null}
         </div>
-        <h3 className="text-sm font-semibold leading-snug">{prompt.title}</h3>
-        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{prompt.shortDescription}</p>
+        <Link href={promptPath(prompt.slug)} className="block rounded-sm">
+          <h3 className="text-sm font-semibold leading-snug hover:text-brand-text">{prompt.title}</h3>
+          <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{prompt.shortDescription}</p>
+        </Link>
         <div className="relative z-20 mt-2 flex items-center gap-2">
           <Link
             href={promptPath(prompt.slug)}

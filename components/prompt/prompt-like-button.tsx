@@ -36,8 +36,19 @@ export function PromptLikeButton({
   }, [])
 
   useEffect(() => {
-    if (!enabled) return
     let active = true
+    try {
+      const savedLike = localStorage.getItem(`promptavero:liked:${promptId}`) === 'true'
+      if (active) {
+        setLiked(savedLike)
+        if (!enabled) setCount(initialCount + (savedLike ? 1 : 0))
+      }
+    } catch (storageError) {
+      console.error('Could not read the saved prompt like state.', storageError)
+      setError('Likes could not be remembered because browser storage is unavailable.')
+    }
+    if (!enabled) return () => { active = false }
+    if (!enabled) return () => { active = false }
     const refreshCounts = async () => {
       try {
         const counts = await fetchPromptEngagement(slug)
@@ -50,21 +61,35 @@ export function PromptLikeButton({
     void refreshCounts()
     window.addEventListener('focus', refreshCounts)
     window.addEventListener('pageshow', refreshCounts)
-    try {
-      setLiked(localStorage.getItem(`promptavero:liked:${promptId}`) === 'true')
-    } catch (storageError) {
-      console.error('Could not read the saved prompt like state.', storageError)
-      setError('Likes are unavailable because browser storage could not be accessed.')
-    }
     return () => {
       active = false
       window.removeEventListener('focus', refreshCounts)
       window.removeEventListener('pageshow', refreshCounts)
     }
-  }, [enabled, promptId, slug])
+  }, [enabled, initialCount, promptId, slug])
 
   async function likePrompt() {
-    if (!enabled || pending) return
+    if (pending) return
+    if (!enabled) {
+      setError('')
+      const nextLiked = !liked
+      setLiked(nextLiked)
+      setCount((currentCount) => Math.max(0, currentCount + (nextLiked ? 1 : -1)))
+      if (nextLiked) {
+        setAnimateLike(true)
+        window.clearTimeout(animationTimer.current)
+        animationTimer.current = window.setTimeout(() => setAnimateLike(false), 700)
+      }
+      try {
+        if (nextLiked) localStorage.setItem(`promptavero:liked:${promptId}`, 'true')
+        else localStorage.removeItem(`promptavero:liked:${promptId}`)
+      } catch (storageError) {
+        console.error('Could not update the saved prompt like state in browser storage.', storageError)
+        setError('Your like is active for this page, but browser storage could not remember it.')
+      }
+      return
+    }
+
     setPending(true)
     setError('')
 
@@ -115,10 +140,10 @@ export function PromptLikeButton({
       <button
         type="button"
         onClick={likePrompt}
-        disabled={!enabled || pending}
+        disabled={pending}
         aria-pressed={liked}
         aria-label={`${liked ? 'Liked' : 'Like'} ${count.toLocaleString()} times`}
-        title={enabled ? undefined : 'Likes are available after connecting Supabase and applying the engagement migration.'}
+        title={enabled ? undefined : 'This like is saved only in this browser while database engagement is unavailable.'}
         className={cn(
           'group/like relative inline-flex items-center justify-center gap-1.5 font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-80',
           variant === 'detail'
