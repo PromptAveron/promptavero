@@ -18,6 +18,7 @@ export interface PublicSiteSettings {
   ad_code_listing?: string
   ad_code_prompt_top?: string
   ad_code_prompt_bottom?: string
+  ad_code_head?: string
 }
 
 const getCachedPublicSiteSettings = unstable_cache(

@@ -1,5 +1,6 @@
 import { saveSettingsAction } from '@/app/admin/actions'
 import { BrandAssetUpload } from '@/components/admin/brand-asset-upload'
+import { DEFAULT_HEAD_AD_CODE } from '@/lib/ad-code'
 import { requireAdmin } from '@/lib/supabase/admin'
 
 function getSettings(value: unknown): Record<string, string | boolean | number> {
@@ -44,13 +45,14 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
         </section>
         <section className="rounded-lg border border-border bg-card p-5 sm:p-6">
           <h2 className="text-sm font-semibold">Advertising</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Ad code loads automatically on public pages and runs in an isolated frame. Ads are never loaded in the admin. Configure Adsterra, AdSense, or another network by pasting its ad-unit code into a placement below.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Head code runs on public pages only. Placement ad code runs in an isolated frame. Ads are never loaded in the admin. Only paste code from ad networks you trust.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <label className="flex items-center gap-2 text-xs font-medium sm:col-span-2"><input name="adsense_enabled" type="checkbox" defaultChecked={settings.adsense_enabled === true} className="size-4 accent-primary" />Enable advertising</label>
+            <label className="flex items-center gap-2 text-xs font-medium sm:col-span-2"><input name="adsense_enabled" type="checkbox" defaultChecked={settings.adsense_enabled === true} className="size-4 accent-primary" />Enable ad placements</label>
+            <label className="text-xs font-medium sm:col-span-2">Global head ad code<textarea name="ad_code_head" rows={6} defaultValue={String(settings.ad_code_head ?? DEFAULT_HEAD_AD_CODE)} placeholder="Paste the ad network code, including its script tags" className={`${inputClass} h-auto py-2 font-mono text-xs`} /><span className="mt-1 block text-[10px] font-normal text-muted-foreground">Added to the document head on public pages. Clear this field to disable the global ad code.</span></label>
             <label className="text-xs font-medium sm:col-span-2">Listing page ad code<textarea name="ad_code_listing" rows={5} defaultValue={String(settings.ad_code_listing ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
             <label className="text-xs font-medium sm:col-span-2">Prompt page ad code — placement 1<textarea name="ad_code_prompt_top" rows={5} defaultValue={String(settings.ad_code_prompt_top ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
             <label className="text-xs font-medium sm:col-span-2">Prompt page ad code — placement 2<textarea name="ad_code_prompt_bottom" rows={5} defaultValue={String(settings.ad_code_prompt_bottom ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
-            <p className="text-[10px] text-muted-foreground sm:col-span-2">Each snippet is limited to 20,000 characters. Only add code from an ad network you trust. Review applicable privacy requirements before enabling third-party ads or analytics.</p>
+            <p className="text-[10px] text-muted-foreground sm:col-span-2">Each snippet is limited to 20,000 characters. Review applicable privacy requirements before enabling third-party ads or analytics.</p>
             <details className="text-xs text-muted-foreground sm:col-span-2">
               <summary className="cursor-pointer font-medium text-foreground">Legacy Google AdSense settings</summary>
               <div className="mt-3 grid gap-4 sm:grid-cols-2">

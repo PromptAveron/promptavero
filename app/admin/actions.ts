@@ -258,7 +258,7 @@ export async function saveSettingsAction(formData: FormData) {
     'max_images', 'google_analytics_id', 'google_search_console_verification',
     'bing_verification_code', 'adsense_publisher_id', 'listing_ad_slot_id',
     'prompt_ad_slot_id', 'adsense_enabled', 'ad_code_listing',
-    'ad_code_prompt_top', 'ad_code_prompt_bottom',
+    'ad_code_prompt_top', 'ad_code_prompt_bottom', 'ad_code_head',
   ]
   const settings: Record<string, string | boolean | number> = {}
   for (const field of fields) {
@@ -271,7 +271,7 @@ export async function saveSettingsAction(formData: FormData) {
   }
   if (key === 'site') {
     settings.adsense_enabled = formData.get('adsense_enabled') === 'on'
-    for (const codeField of ['ad_code_listing', 'ad_code_prompt_top', 'ad_code_prompt_bottom']) {
+    for (const codeField of ['ad_code_listing', 'ad_code_prompt_top', 'ad_code_prompt_bottom', 'ad_code_head']) {
       const code = settings[codeField]
       if (typeof code === 'string' && code.length > 20000) {
         throw new Error('Each ad code snippet must be 20,000 characters or fewer.')
