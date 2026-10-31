@@ -2,7 +2,6 @@
 
 import Script from 'next/script'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { DEFAULT_HEAD_AD_CODE } from '@/lib/ad-code'
 import type { PublicSiteSettings } from '@/lib/public-settings'
 
 declare global {
@@ -21,33 +20,10 @@ export function PublicIntegrations({
 }) {
   const publisherId = settings.adsense_publisher_id
   const analyticsId = settings.google_analytics_id
-  const headAdCode = settings.ad_code_head ?? DEFAULT_HEAD_AD_CODE
   const validAnalyticsId = analyticsId && /^G-[A-Z0-9]+$/i.test(analyticsId) ? analyticsId : undefined
   const validPublisherId = publisherId && /^ca-pub-\d{10,20}$/.test(publisherId) ? publisherId : undefined
   const adsEnabled = settings.adsense_enabled === true && Boolean(validPublisherId)
   const analyticsEnabled = Boolean(validAnalyticsId)
-
-  useEffect(() => {
-    if (!headAdCode?.trim() || document.head.querySelector('[data-promptavero-head-ad]')) return
-
-    const parsedCode = new DOMParser().parseFromString(headAdCode, 'text/html')
-    const sourceScripts = Array.from(parsedCode.querySelectorAll('script'))
-    const scripts = sourceScripts.length ? sourceScripts : [null]
-
-    for (const source of scripts) {
-      const script = document.createElement('script')
-      if (source) {
-        for (const attribute of Array.from(source.attributes)) {
-          script.setAttribute(attribute.name, attribute.value)
-        }
-        script.textContent = source.textContent
-      } else {
-        script.textContent = headAdCode
-      }
-      script.dataset.promptaveroHeadAd = 'true'
-      document.head.appendChild(script)
-    }
-  }, [headAdCode])
 
   return (
     <>

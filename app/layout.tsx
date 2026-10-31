@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Inter_Tight } from 'next/font/google'
 import { SiteChrome } from '@/components/site-chrome'
 import { ThemeProvider } from '@/components/theme-provider'
+import { DEFAULT_HEAD_AD_CODE } from '@/lib/ad-code'
 import { siteConfig } from '@/data/site-config'
 import { categories, getAllTags } from '@/lib/content'
 import { websiteJsonLd } from '@/lib/seo'
@@ -52,6 +53,8 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getPublicSiteSettings()
+  const headAdCode = settings.ad_code_head ?? DEFAULT_HEAD_AD_CODE
+  const headAdScript = headAdCode.match(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/i)?.[1] ?? headAdCode
   const headerCategories = categories.map(({ name, slug }) => ({ name, slug }))
   const headerTags = getAllTags()
     .slice(0, 8)
@@ -59,6 +62,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${inter.variable} ${interTight.variable}`}>
+      <head>
+        {headAdScript.trim() ? <script dangerouslySetInnerHTML={{ __html: headAdScript }} /> : null}
+      </head>
       <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SiteChrome categories={headerCategories} tags={headerTags} jsonLd={websiteJsonLd()} settings={settings}>
