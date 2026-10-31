@@ -63,6 +63,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${inter.variable} ${interTight.variable}`}>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__name=window.__name||function(target,name){Object.defineProperty(target,'name',{value:name,configurable:true});return target}`,
+          }}
+        />
         {headAdScript.trim() ? <script dangerouslySetInnerHTML={{ __html: headAdScript }} /> : null}
       </head>
       <body suppressHydrationWarning>

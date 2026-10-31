@@ -107,9 +107,7 @@ export function PromptTextPanel({
           Full prompt
         </h2>
         <div className="flex flex-wrap items-center gap-3">
-          {engagementEnabled ? (
-            <span className="text-xs text-muted-foreground">Copied {copyCount.toLocaleString()} Times</span>
-          ) : null}
+          <span className="text-xs text-muted-foreground">Copied {copyCount.toLocaleString()} Times</span>
           <button
             type="button"
             onClick={onCopy}

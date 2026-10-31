@@ -1,6 +1,6 @@
 import { saveSettingsAction } from '@/app/admin/actions'
 import { BrandAssetUpload } from '@/components/admin/brand-asset-upload'
-import { DEFAULT_HEAD_AD_CODE } from '@/lib/ad-code'
+import { DEFAULT_HEAD_AD_CODE, getPromptPageAdCodes } from '@/lib/ad-code'
 import { requireAdmin } from '@/lib/supabase/admin'
 
 function getSettings(value: unknown): Record<string, string | boolean | number> {
@@ -14,6 +14,10 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
   const { data, error } = await supabase.from('site_settings').select('value').eq('key', 'site').maybeSingle()
   if (error) throw new Error(`Could not load site settings: ${error.message}`)
   const settings = getSettings(data?.value)
+  const promptPageAds = getPromptPageAdCodes({
+    ad_code_prompt_top: typeof settings.ad_code_prompt_top === 'string' ? settings.ad_code_prompt_top : undefined,
+    ad_code_prompt_bottom: typeof settings.ad_code_prompt_bottom === 'string' ? settings.ad_code_prompt_bottom : undefined,
+  })
   const inputClass = 'mt-1.5 h-9 w-full rounded-md border border-border bg-card px-3 text-sm font-normal outline-none focus:border-primary'
   return (
     <div className="mx-auto max-w-4xl pt-10 md:pt-0">
@@ -50,8 +54,9 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
             <label className="flex items-center gap-2 text-xs font-medium sm:col-span-2"><input name="adsense_enabled" type="checkbox" defaultChecked={settings.adsense_enabled === true} className="size-4 accent-primary" />Enable ad placements</label>
             <label className="text-xs font-medium sm:col-span-2">Global head ad code<textarea name="ad_code_head" rows={6} defaultValue={String(settings.ad_code_head ?? DEFAULT_HEAD_AD_CODE)} placeholder="Paste the ad network code, including its script tags" className={`${inputClass} h-auto py-2 font-mono text-xs`} /><span className="mt-1 block text-[10px] font-normal text-muted-foreground">Added to the document head on public pages. Clear this field to disable the global ad code.</span></label>
             <label className="text-xs font-medium sm:col-span-2">Listing page ad code<textarea name="ad_code_listing" rows={5} defaultValue={String(settings.ad_code_listing ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
-            <label className="text-xs font-medium sm:col-span-2">Prompt page ad code — placement 1<textarea name="ad_code_prompt_top" rows={5} defaultValue={String(settings.ad_code_prompt_top ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
-            <label className="text-xs font-medium sm:col-span-2">Prompt page ad code — placement 2<textarea name="ad_code_prompt_bottom" rows={5} defaultValue={String(settings.ad_code_prompt_bottom ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
+            <label className="text-xs font-medium sm:col-span-2">Below the prompt text<textarea name="ad_code_prompt_top" rows={5} defaultValue={promptPageAds.belowPrompt} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
+            <label className="text-xs font-medium sm:col-span-2">Below the prompt image<textarea name="ad_code_prompt_bottom" rows={7} defaultValue={promptPageAds.belowImage} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
+            <p className="text-[10px] text-muted-foreground sm:col-span-2">These codes are the defaults for prompt pages. Use the advertising switch above to enable or disable ad placements.</p>
             <p className="text-[10px] text-muted-foreground sm:col-span-2">Each snippet is limited to 20,000 characters. Review applicable privacy requirements before enabling third-party ads or analytics.</p>
             <details className="text-xs text-muted-foreground sm:col-span-2">
               <summary className="cursor-pointer font-medium text-foreground">Legacy Google AdSense settings</summary>

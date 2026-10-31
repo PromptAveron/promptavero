@@ -2,6 +2,7 @@
 
 import Script from 'next/script'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { getPromptPageAdCodes } from '@/lib/ad-code'
 import type { PublicSiteSettings } from '@/lib/public-settings'
 
 declare global {
@@ -58,9 +59,11 @@ export function AdSlot({
   settings: PublicSiteSettings
   kind: 'listing' | 'prompt_top' | 'prompt_bottom'
 }) {
-  const customCode = kind === 'listing'
+  const promptPageAds = getPromptPageAdCodes(settings)
+  const configuredCode = kind === 'listing'
     ? settings.ad_code_listing
-    : kind === 'prompt_top' ? settings.ad_code_prompt_top : settings.ad_code_prompt_bottom
+    : kind === 'prompt_top' ? promptPageAds.belowPrompt : promptPageAds.belowImage
+  const customCode = configuredCode?.trim() ?? ''
   const publisher = settings.adsense_publisher_id
   const slot = kind === 'listing' ? settings.listing_ad_slot_id : settings.prompt_ad_slot_id
   const validPublisher = publisher && /^ca-pub-\d{10,20}$/.test(publisher) ? publisher : undefined

@@ -96,6 +96,7 @@ export default async function PromptPage({ params }: { params: Params }) {
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
         <div className="lg:sticky lg:top-24 lg:self-start">
           <PromptGallery slug={prompt.slug} title={prompt.title} images={prompt.images} />
+          <AdSlot settings={settings} kind="prompt_bottom" />
         </div>
 
         <article className="min-w-0">
@@ -217,8 +218,6 @@ export default async function PromptPage({ params }: { params: Params }) {
           </div>
         </section>
       ) : null}
-
-      <AdSlot settings={settings} kind="prompt_bottom" />
 
       {related.length > 0 ? (
         <section aria-labelledby="related-heading" className="mt-20">
