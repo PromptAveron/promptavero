@@ -70,7 +70,7 @@ export function AdSlot({
   const validSlot = slot && /^\d{5,20}$/.test(slot) && kind !== 'prompt_top' ? slot : undefined
   const [ready, setReady] = useState(false)
   const [initialized, setInitialized] = useState(false)
-  const [frameHeight, setFrameHeight] = useState(280)
+  const [frameHeight, setFrameHeight] = useState(50)
   const frameRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
@@ -112,8 +112,8 @@ export function AdSlot({
           title="Advertisement"
           sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
           referrerPolicy="strict-origin-when-cross-origin"
-          srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;overflow:hidden}body{display:flex;justify-content:center}</style></head><body>${customCode}<script>new ResizeObserver(()=>parent.postMessage({type:'promptavero-ad-height',height:document.documentElement.scrollHeight},'*')).observe(document.documentElement);</script></body></html>`}
-          style={{ height: frameHeight, width: '100%', border: 0, overflow: 'hidden' }}
+          srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;height:auto;min-height:0;overflow:hidden;background:transparent}body{display:flex;align-items:flex-start;justify-content:center}</style></head><body>${customCode}<script>(()=>{const measure=()=>{const height=Math.max(0,...Array.from(document.body.querySelectorAll('*')).filter(element=>element.tagName!=='SCRIPT').map(element=>Math.ceil(element.getBoundingClientRect().bottom+window.scrollY)));parent.postMessage({type:'promptavero-ad-height',height},'*')};const resize=new ResizeObserver(measure);const observe=()=>document.body.querySelectorAll('*').forEach(element=>resize.observe(element));observe();new MutationObserver(()=>{observe();measure()}).observe(document.body,{childList:true,subtree:true,attributes:true});measure()})()</script></body></html>`}
+          style={{ height: frameHeight, width: '100%', border: 0, overflow: 'hidden', background: 'transparent' }}
           className="block"
         />
       ) : (

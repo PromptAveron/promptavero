@@ -327,6 +327,59 @@ export async function saveSettingsAction(formData: FormData) {
   redirect(`/admin/${key === 'seo' ? 'seo' : 'settings'}/?saved=1`)
 }
 
+export async function saveAdvertisingSettingsAction(formData: FormData) {
+  const { supabase, user } = await authorizeAdminAction()
+  const settings: Record<string, string | boolean> = {
+    adsense_enabled: formData.get('adsense_enabled') === 'on',
+  }
+  for (const field of [
+    'adsense_publisher_id',
+    'listing_ad_slot_id',
+    'prompt_ad_slot_id',
+    'ad_code_listing',
+    'ad_code_prompt_top',
+    'ad_code_prompt_bottom',
+    'ad_code_head',
+  ]) {
+    settings[field] = String(formData.get(field) ?? '').trim()
+  }
+  for (const codeField of ['ad_code_listing', 'ad_code_prompt_top', 'ad_code_prompt_bottom', 'ad_code_head']) {
+    const code = settings[codeField]
+    if (typeof code === 'string' && code.length > 20000) {
+      throw new Error('Each ad code snippet must be 20,000 characters or fewer.')
+    }
+  }
+  const publisherId = settings.adsense_publisher_id
+  if (typeof publisherId === 'string' && publisherId && !/^ca-pub-\d{10,20}$/.test(publisherId)) {
+    throw new Error('AdSense publisher ID should look like ca-pub- followed by your publisher number.')
+  }
+  for (const slotField of ['listing_ad_slot_id', 'prompt_ad_slot_id']) {
+    const slotId = settings[slotField]
+    if (typeof slotId === 'string' && slotId && !/^\d{5,20}$/.test(slotId)) {
+      throw new Error('Ad slot IDs should contain only digits.')
+    }
+  }
+
+  const { data: existing, error: loadError } = await supabase
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'site')
+    .maybeSingle()
+  if (loadError) throw new Error(`Could not load existing settings: ${loadError.message}`)
+  const oldSettings = existing?.value && typeof existing.value === 'object' && !Array.isArray(existing.value)
+    ? existing.value as Record<string, unknown>
+    : {}
+  const { error } = await supabase.from('site_settings').upsert(
+    { key: 'site', value: { ...oldSettings, ...settings }, updated_by: user.id, updated_at: new Date().toISOString() },
+    { onConflict: 'key' },
+  )
+  if (error) throw new Error(`Could not save advertising settings: ${error.message}`)
+  revalidatePublicSettings()
+  revalidatePath('/admin/settings')
+  revalidatePath('/', 'layout')
+  redirect('/admin/settings/?ads_saved=1')
+}
+
 export async function saveBrandAssetAction(asset: 'logo' | 'favicon', imageUrl: string) {
   const { supabase, user } = await authorizeAdminAction()
   if (!['logo', 'favicon'].includes(asset)) throw new Error('Invalid brand asset type.')
