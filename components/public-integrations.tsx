@@ -70,7 +70,7 @@ export function AdSlot({
   const validSlot = slot && /^\d{5,20}$/.test(slot) && kind !== 'prompt_top' ? slot : undefined
   const [ready, setReady] = useState(false)
   const [initialized, setInitialized] = useState(false)
-  const [frameHeight, setFrameHeight] = useState(50)
+  const [frameHeight, setFrameHeight] = useState(0)
   const frameRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export function AdSlot({
     const resize = (event: MessageEvent) => {
       if (event.source !== frameRef.current?.contentWindow || event.data?.type !== 'promptavero-ad-height') return
       const height = Number(event.data.height)
-      if (Number.isFinite(height)) setFrameHeight(Math.max(50, Math.min(1000, height)))
+      if (Number.isFinite(height)) setFrameHeight(Math.max(0, Math.min(1000, height)))
     }
     window.addEventListener('promptavero:ads-ready', markReady)
     window.addEventListener('message', resize)
@@ -88,6 +88,10 @@ export function AdSlot({
       window.removeEventListener('message', resize)
     }
   }, [])
+
+  useEffect(() => {
+    setFrameHeight(0)
+  }, [customCode])
 
   useEffect(() => {
     if (customCode || !ready || !validPublisher || !validSlot || settings.adsense_enabled !== true || initialized) return
@@ -104,28 +108,36 @@ export function AdSlot({
   if (!customCode && (!validPublisher || !validSlot)) return null
 
   return (
-    <section className="my-8 w-full text-center" aria-label="Advertisement">
-      <h2 className="mb-2 text-xs font-medium text-muted-foreground">Advertisment</h2>
+    <section
+      className={customCode ? (frameHeight > 0 ? 'my-2 w-full text-center' : 'm-0 w-full text-center') : 'my-2 w-full text-center'}
+      aria-label="Advertisement"
+    >
       {customCode ? (
-        <iframe
-          ref={frameRef}
-          title="Advertisement"
-          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-          referrerPolicy="strict-origin-when-cross-origin"
-          srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;height:auto;min-height:0;overflow:hidden;background:transparent}body{display:flex;align-items:flex-start;justify-content:center}</style></head><body>${customCode}<script>(()=>{const measure=()=>{const height=Math.max(0,...Array.from(document.body.querySelectorAll('*')).filter(element=>element.tagName!=='SCRIPT').map(element=>Math.ceil(element.getBoundingClientRect().bottom+window.scrollY)));parent.postMessage({type:'promptavero-ad-height',height},'*')};const resize=new ResizeObserver(measure);const observe=()=>document.body.querySelectorAll('*').forEach(element=>resize.observe(element));observe();new MutationObserver(()=>{observe();measure()}).observe(document.body,{childList:true,subtree:true,attributes:true});measure()})()</script></body></html>`}
-          style={{ height: frameHeight, width: '100%', border: 0, overflow: 'hidden', background: 'transparent' }}
-          className="block"
-        />
+        <>
+          {frameHeight > 0 ? <h2 className="mb-1 text-xs font-medium text-muted-foreground">Advertisment</h2> : null}
+          <iframe
+            ref={frameRef}
+            title="Advertisement"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+            referrerPolicy="strict-origin-when-cross-origin"
+            srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;height:auto;min-height:0;overflow:hidden;background:transparent}body{display:flex;align-items:flex-start;justify-content:center}iframe,img,video{max-width:100%}</style></head><body>${customCode}<script>(()=>{const measure=()=>{const height=Math.max(0,...Array.from(document.body.querySelectorAll('*')).filter(element=>element.tagName!=='SCRIPT').map(element=>Math.ceil(element.getBoundingClientRect().bottom+window.scrollY)));parent.postMessage({type:'promptavero-ad-height',height},'*')};const resize=new ResizeObserver(measure);const observe=()=>document.body.querySelectorAll('*').forEach(element=>resize.observe(element));observe();new MutationObserver(()=>{observe();measure()}).observe(document.body,{childList:true,subtree:true,attributes:true});measure()})()</script></body></html>`}
+            style={{ height: frameHeight, width: '100%', maxWidth: '100%', border: 0, overflow: 'hidden', background: 'transparent' }}
+            className="block"
+          />
+        </>
       ) : (
-        <ins
-          className="adsbygoogle mx-auto block min-h-24 overflow-hidden rounded-xl bg-muted/40 text-center"
-          style={{ display: 'block' }}
-          data-ad-client={validPublisher}
-          data-ad-slot={validSlot}
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-          aria-label="Advertisement"
-        />
+        <>
+          <h2 className="mb-1 text-xs font-medium text-muted-foreground">Advertisment</h2>
+          <ins
+            className="adsbygoogle mx-auto block overflow-hidden text-center"
+            style={{ display: 'block' }}
+            data-ad-client={validPublisher}
+            data-ad-slot={validSlot}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+            aria-label="Advertisement"
+          />
+        </>
       )}
     </section>
   )

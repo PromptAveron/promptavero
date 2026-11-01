@@ -34,20 +34,20 @@ export function PromptCard({
             className="size-full object-cover transition-transform duration-500 group-hover/image:scale-[1.03]"
           />
           {prompt.isFeatured ? (
-            <span className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-medium text-[#3d2fb0] shadow-sm">
-              <Star className="size-3 fill-current" aria-hidden="true" />
+            <span className="pointer-events-none absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/95 px-1.5 py-1 text-[10px] font-medium text-[#3d2fb0] shadow-sm sm:left-3 sm:top-3 sm:gap-1.5 sm:px-2.5 sm:text-xs">
+              <Star className="size-2.5 shrink-0 fill-current sm:size-3" aria-hidden="true" />
               Featured
             </span>
           ) : null}
         </PromptCardLink>
-        <div className="absolute right-3 top-3 z-30">
+        <div className="absolute right-1 top-2 z-30 sm:right-3 sm:top-3">
           <PromptLikeButton
             promptId={prompt.id}
             slug={prompt.slug}
             initialCount={prompt.likeCount}
             enabled={prompt.engagementEnabled}
             iconOnly
-            className="h-8 min-w-8 gap-1 px-2 text-xs backdrop-blur-md"
+            className="h-7 min-w-7 gap-0.5 px-1.5 text-[10px] backdrop-blur-md sm:h-8 sm:min-w-8 sm:gap-1 sm:px-2 sm:text-xs"
           />
         </div>
       </div>

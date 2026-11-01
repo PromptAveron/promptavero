@@ -11,6 +11,7 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 const interTight = Inter_Tight({ subsets: ['latin'], variable: '--font-inter-tight', display: 'swap' })
+const SECOND_MONETAG_SCRIPT = 'https://5gvci.com/act/files/tag.min.js?z=12165667'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getPublicSiteSettings()
@@ -85,6 +86,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <script {...headAdScriptProps} src={headAdScriptSrc[1] ?? headAdScriptSrc[2] ?? headAdScriptSrc[3]} />
         ) : headAdScript.trim() ? (
           <script dangerouslySetInnerHTML={{ __html: headAdScript }} />
+        ) : null}
+        {!headAdCode.includes(SECOND_MONETAG_SCRIPT) ? (
+          <script src={SECOND_MONETAG_SCRIPT} data-cfasync="false" async />
         ) : null}
       </head>
       <body suppressHydrationWarning>
