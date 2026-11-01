@@ -1,6 +1,6 @@
 import { saveSettingsAction } from '@/app/admin/actions'
 import { BrandAssetUpload } from '@/components/admin/brand-asset-upload'
-import { DEFAULT_HEAD_AD_CODE, getPromptPageAdCodes } from '@/lib/ad-code'
+import { getHeadAdCode, getPromptPageAdCodes } from '@/lib/ad-code'
 import { requireAdmin } from '@/lib/supabase/admin'
 
 function getSettings(value: unknown): Record<string, string | boolean | number> {
@@ -52,8 +52,8 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
           <p className="mt-1 text-xs text-muted-foreground">Head code runs on public pages only. Placement ad code runs in an isolated frame. Ads are never loaded in the admin. Only paste code from ad networks you trust.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <label className="flex items-center gap-2 text-xs font-medium sm:col-span-2"><input name="adsense_enabled" type="checkbox" defaultChecked={settings.adsense_enabled === true} className="size-4 accent-primary" />Enable ad placements</label>
-            <label className="text-xs font-medium sm:col-span-2">Global head ad code<textarea name="ad_code_head" rows={6} defaultValue={String(settings.ad_code_head ?? DEFAULT_HEAD_AD_CODE)} placeholder="Paste the ad network code, including its script tags" className={`${inputClass} h-auto py-2 font-mono text-xs`} /><span className="mt-1 block text-[10px] font-normal text-muted-foreground">Added to the document head on public pages. Clear this field to disable the global ad code.</span></label>
-            <label className="text-xs font-medium sm:col-span-2">Listing page ad code<textarea name="ad_code_listing" rows={5} defaultValue={String(settings.ad_code_listing ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
+            <label className="text-xs font-medium sm:col-span-2">Global head ad code<textarea name="ad_code_head" rows={6} defaultValue={getHeadAdCode(typeof settings.ad_code_head === 'string' ? settings.ad_code_head : undefined)} placeholder="Paste the ad network code, including its script tags" className={`${inputClass} h-auto py-2 font-mono text-xs`} /><span className="mt-1 block text-[10px] font-normal text-muted-foreground">Added to the document head on public pages. Clear this field to disable the global ad code.</span></label>
+            <label className="text-xs font-medium sm:col-span-2">Explore page ad code (below filters)<textarea name="ad_code_listing" rows={5} defaultValue={String(settings.ad_code_listing ?? '')} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /><span className="mt-1 block text-[10px] font-normal text-muted-foreground">Centered below the Explore filters. Enable ad placements above to display it.</span></label>
             <label className="text-xs font-medium sm:col-span-2">Below the prompt text<textarea name="ad_code_prompt_top" rows={5} defaultValue={promptPageAds.belowPrompt} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
             <label className="text-xs font-medium sm:col-span-2">Below the prompt image<textarea name="ad_code_prompt_bottom" rows={7} defaultValue={promptPageAds.belowImage} placeholder="Paste an ad unit code snippet" className={`${inputClass} h-auto py-2 font-mono text-xs`} /></label>
             <p className="text-[10px] text-muted-foreground sm:col-span-2">These codes are the defaults for prompt pages. Use the advertising switch above to enable or disable ad placements.</p>

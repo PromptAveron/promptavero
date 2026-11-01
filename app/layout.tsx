@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Inter_Tight } from 'next/font/google'
 import { SiteChrome } from '@/components/site-chrome'
 import { ThemeProvider } from '@/components/theme-provider'
-import { DEFAULT_HEAD_AD_CODE } from '@/lib/ad-code'
+import { getHeadAdCode } from '@/lib/ad-code'
 import { siteConfig } from '@/data/site-config'
 import { categories, getAllTags } from '@/lib/content'
 import { websiteJsonLd } from '@/lib/seo'
@@ -53,8 +53,21 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const settings = await getPublicSiteSettings()
-  const headAdCode = settings.ad_code_head ?? DEFAULT_HEAD_AD_CODE
-  const headAdScript = headAdCode.match(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/i)?.[1] ?? headAdCode
+  const headAdCode = getHeadAdCode(settings.ad_code_head)
+  const headAdMatch = headAdCode.match(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/i)
+  const headAdScript = headAdMatch?.[2] ?? headAdCode
+  const headAdAttributes = headAdMatch?.[1]
+  const headAdScriptSrc = headAdAttributes?.match(/\bsrc\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s>]+))/i)
+  const headAdScriptProps = headAdScriptSrc
+    ? Object.fromEntries(
+        Array.from((headAdAttributes ?? '').matchAll(/([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g))
+          .filter(([ , name ]) => name.toLowerCase() !== 'src')
+          .map(([ , name, doubleQuoted, singleQuoted, unquoted ]) => [
+            name.toLowerCase(),
+            doubleQuoted ?? singleQuoted ?? unquoted ?? true,
+          ]),
+      )
+    : null
   const headerCategories = categories.map(({ name, slug }) => ({ name, slug }))
   const headerTags = getAllTags()
     .slice(0, 8)
@@ -68,7 +81,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             __html: `window.__name=window.__name||function(target,name){Object.defineProperty(target,'name',{value:name,configurable:true});return target}`,
           }}
         />
-        {headAdScript.trim() ? <script dangerouslySetInnerHTML={{ __html: headAdScript }} /> : null}
+        {headAdScriptSrc && headAdScriptProps ? (
+          <script {...headAdScriptProps} src={headAdScriptSrc[1] ?? headAdScriptSrc[2] ?? headAdScriptSrc[3]} />
+        ) : headAdScript.trim() ? (
+          <script dangerouslySetInnerHTML={{ __html: headAdScript }} />
+        ) : null}
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

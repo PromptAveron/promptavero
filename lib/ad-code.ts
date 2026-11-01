@@ -1,4 +1,16 @@
-export const DEFAULT_HEAD_AD_CODE = `<script>(function(s){s.dataset.zone='12158647',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>`
+export const DEFAULT_HEAD_AD_CODE = `<script src="https://5gvci.com/act/files/tag.min.js?z=12165667" data-cfasync="false" async></script>`
+
+const PREVIOUS_HEAD_AD_CODE = `<script>(function(s){s.dataset.zone='12158647',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>`
+
+export function getHeadAdCode(configuredCode?: string | null) {
+  if (configuredCode == null) return DEFAULT_HEAD_AD_CODE
+  if (!configuredCode.trim()) return ''
+  if (
+    configuredCode.trim() === PREVIOUS_HEAD_AD_CODE
+    || (configuredCode.includes('12158647') && configuredCode.includes('n6wxm.com/vignette.min.js'))
+  ) return DEFAULT_HEAD_AD_CODE
+  return configuredCode
+}
 
 export const DEFAULT_PROMPT_BANNER_AD_CODE = `<script>
   atOptions = {

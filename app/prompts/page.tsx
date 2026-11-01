@@ -44,9 +44,9 @@ export default async function ExplorePage() {
           categories={categoryOptions}
           tags={tagOptions}
           pageSize={siteConfig.pageSize}
+          adSlot={<AdSlot settings={settings} kind="listing" />}
         />
       </Suspense>
-      <AdSlot settings={settings} kind="listing" />
     </div>
   )
 }

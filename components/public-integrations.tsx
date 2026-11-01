@@ -101,29 +101,32 @@ export function AdSlot({
   }, [customCode, initialized, ready, settings.adsense_enabled, validPublisher, validSlot])
 
   if (settings.adsense_enabled !== true) return null
-  if (customCode?.trim()) {
-    return (
-      <iframe
-        ref={frameRef}
-        title="Advertisement"
-        sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-        referrerPolicy="strict-origin-when-cross-origin"
-        srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;overflow:hidden}body{display:flex;justify-content:center}</style></head><body>${customCode}<script>new ResizeObserver(()=>parent.postMessage({type:'promptavero-ad-height',height:document.documentElement.scrollHeight},'*')).observe(document.documentElement);</script></body></html>`}
-        style={{ height: frameHeight, width: '100%', border: 0, overflow: 'hidden' }}
-        className="my-8 block"
-      />
-    )
-  }
-  if (!validPublisher || !validSlot) return null
+  if (!customCode && (!validPublisher || !validSlot)) return null
+
   return (
-    <ins
-      className="adsbygoogle my-8 block min-h-24 overflow-hidden rounded-xl bg-muted/40 text-center"
-      style={{ display: 'block' }}
-      data-ad-client={validPublisher}
-      data-ad-slot={validSlot}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-      aria-label="Advertisement"
-    />
+    <section className="my-8 w-full text-center" aria-label="Advertisement">
+      <h2 className="mb-2 text-xs font-medium text-muted-foreground">Advertisment</h2>
+      {customCode ? (
+        <iframe
+          ref={frameRef}
+          title="Advertisement"
+          sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+          referrerPolicy="strict-origin-when-cross-origin"
+          srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;overflow:hidden}body{display:flex;justify-content:center}</style></head><body>${customCode}<script>new ResizeObserver(()=>parent.postMessage({type:'promptavero-ad-height',height:document.documentElement.scrollHeight},'*')).observe(document.documentElement);</script></body></html>`}
+          style={{ height: frameHeight, width: '100%', border: 0, overflow: 'hidden' }}
+          className="block"
+        />
+      ) : (
+        <ins
+          className="adsbygoogle mx-auto block min-h-24 overflow-hidden rounded-xl bg-muted/40 text-center"
+          style={{ display: 'block' }}
+          data-ad-client={validPublisher}
+          data-ad-slot={validSlot}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+          aria-label="Advertisement"
+        />
+      )}
+    </section>
   )
 }
