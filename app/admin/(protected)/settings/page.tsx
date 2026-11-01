@@ -49,7 +49,7 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
         </section>
         <section className="rounded-lg border border-border bg-card p-5 sm:p-6">
           <h2 className="text-sm font-semibold">Advertising</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Head code runs on public pages only. Placement ad code runs in an isolated frame. Ads are never loaded in the admin. Only paste code from ad networks you trust.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Ad code runs on public pages only, never in the admin. Placement scripts can access the page DOM and cookies to support ad networks. Only paste code from ad networks you trust.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <label className="flex items-center gap-2 text-xs font-medium sm:col-span-2"><input name="adsense_enabled" type="checkbox" defaultChecked={settings.adsense_enabled === true} className="size-4 accent-primary" />Enable ad placements</label>
             <label className="text-xs font-medium sm:col-span-2">Global head ad code<textarea name="ad_code_head" rows={6} defaultValue={getHeadAdCode(typeof settings.ad_code_head === 'string' ? settings.ad_code_head : undefined)} placeholder="Paste the ad network code, including its script tags" className={`${inputClass} h-auto py-2 font-mono text-xs`} /><span className="mt-1 block text-[10px] font-normal text-muted-foreground">Added to the document head on public pages. Clear this field to disable the global ad code.</span></label>

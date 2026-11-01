@@ -110,7 +110,7 @@ export function AdSlot({
         <iframe
           ref={frameRef}
           title="Advertisement"
-          sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
           referrerPolicy="strict-origin-when-cross-origin"
           srcDoc={`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;width:100%;overflow:hidden}body{display:flex;justify-content:center}</style></head><body>${customCode}<script>new ResizeObserver(()=>parent.postMessage({type:'promptavero-ad-height',height:document.documentElement.scrollHeight},'*')).observe(document.documentElement);</script></body></html>`}
           style={{ height: frameHeight, width: '100%', border: 0, overflow: 'hidden' }}
