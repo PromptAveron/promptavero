@@ -29,12 +29,6 @@ export function getPromptPageAdCodes(settings: {
 }) {
   const promptTop = settings.ad_code_prompt_top?.trim()
   const promptBottom = settings.ad_code_prompt_bottom?.trim()
-  const hasPreviousPlacementOrder = promptTop?.includes('bauval.org/22/febbed7f28e37e93038641d872a6483a')
-    && promptBottom?.includes('bauval.org/21/f89da9a9f97ffb94ecd3ab1fd38da368')
-
-  if (hasPreviousPlacementOrder) {
-    return { belowPrompt: promptBottom, belowImage: promptTop }
-  }
 
   return {
     belowPrompt: promptTop ?? DEFAULT_PROMPT_CONTAINER_AD_CODE,

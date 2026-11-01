@@ -96,6 +96,7 @@ export default async function PromptPage({ params }: { params: Params }) {
       <div className="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-12">
         <div className="lg:sticky lg:top-24 lg:self-start">
           <PromptGallery slug={prompt.slug} title={prompt.title} images={prompt.images} />
+          <AdSlot settings={settings} kind="prompt_bottom" />
         </div>
 
         <article className="min-w-0">
@@ -119,20 +120,18 @@ export default async function PromptPage({ params }: { params: Params }) {
               engagementEnabled={prompt.engagementEnabled ?? false}
             />
           </div>
-          <AdSlot settings={settings} kind="prompt_top" />
-
-          <div className="mt-5 flex flex-wrap items-start gap-3">
+          <div className="mt-5 flex flex-nowrap items-start gap-2 sm:gap-3">
             <PromptLikeButton
               promptId={prompt.id}
               slug={prompt.slug}
               initialCount={prompt.likeCount ?? 0}
               enabled={prompt.engagementEnabled ?? false}
               variant="detail"
-              className="h-12 px-5 text-sm"
+              className="h-10 w-[5.75rem] gap-1 px-1.5 text-[11px] sm:h-12 sm:w-40 sm:gap-1.5 sm:px-5 sm:text-sm"
             />
             <ShareActions url={canonical} title={prompt.title} />
           </div>
-          <AdSlot settings={settings} kind="prompt_bottom" />
+          <AdSlot settings={settings} kind="prompt_top" />
 
           {details.length > 0 ? (
             <section aria-labelledby="details-heading" className="mt-8">

@@ -172,7 +172,7 @@ export function PromptLikeButton({
         {iconOnly ? (
           <span className="text-xs tabular-nums">{count.toLocaleString()}</span>
         ) : (
-          <span className={cn(variant === 'detail' && 'whitespace-nowrap rounded-full bg-white/20 px-2 py-0.5 text-sm tabular-nums')}>
+          <span className={cn(variant === 'detail' && 'whitespace-nowrap rounded-full bg-white/20 px-1 py-0.5 text-[11px] tabular-nums sm:px-2 sm:text-sm')}>
             {liked ? 'Liked' : 'Like'} {count.toLocaleString()}
           </span>
         )}

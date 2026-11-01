@@ -3,9 +3,13 @@ import { readFileSync } from 'node:fs'
 const redirectEntries = JSON.parse(
   readFileSync(new URL('./data/redirects.json', import.meta.url), 'utf8'),
 )
-const imageKitImagePattern = process.env.IMAGEKIT_URL_ENDPOINT
-  ? new URL(`${process.env.IMAGEKIT_URL_ENDPOINT.replace(/\/+$/, '')}/**`)
-  : null
+const imageKitEndpoint = new URL(process.env.IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/promptavero')
+const imageKitImagePattern = {
+  protocol: imageKitEndpoint.protocol.slice(0, -1),
+  hostname: imageKitEndpoint.hostname,
+  port: imageKitEndpoint.port,
+  pathname: `${imageKitEndpoint.pathname.replace(/\/+$/, '')}/**`,
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -16,7 +20,7 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     formats: ['image/webp'],
-    remotePatterns: imageKitImagePattern ? [imageKitImagePattern] : [],
+    remotePatterns: [imageKitImagePattern],
     ...(process.env.CLOUDFLARE_WORKERS === '1' ? { unoptimized: true } : {}),
   },
   async redirects() {

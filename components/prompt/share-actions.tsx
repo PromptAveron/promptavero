@@ -34,15 +34,25 @@ export function ShareActions({ url, title }: { url: string; title: string }) {
   }
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={share} className={btn({ variant: 'outline', size: 'md' })}>
+    <div className="min-w-0">
+      <div className="flex flex-nowrap gap-1 sm:gap-2">
+        <button
+          type="button"
+          onClick={share}
+          className={btn({ variant: 'outline', size: 'md', className: 'h-10 gap-1 px-2 text-[11px] sm:h-12 sm:gap-2 sm:px-4 sm:text-sm' })}
+        >
           <Share2 aria-hidden="true" />
-          Share Prompt
+          <span className="sm:hidden">Share</span>
+          <span className="hidden sm:inline">Share Prompt</span>
         </button>
-        <button type="button" onClick={copyUrl} className={btn({ variant: 'outline', size: 'md' })}>
+        <button
+          type="button"
+          onClick={copyUrl}
+          className={btn({ variant: 'outline', size: 'md', className: 'h-10 gap-1 px-2 text-[11px] sm:h-12 sm:gap-2 sm:px-4 sm:text-sm' })}
+        >
           <Link2 aria-hidden="true" />
-          Copy Prompt URL
+          <span className="sm:hidden">Copy URL</span>
+          <span className="hidden sm:inline">Copy Prompt URL</span>
         </button>
       </div>
       <p role="status" aria-live="polite" className="mt-2 min-h-5 text-sm text-muted-foreground">
